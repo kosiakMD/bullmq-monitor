@@ -18,6 +18,23 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiListItemIcon-root': {
       minWidth: 32,
     },
+    /**
+     * MUI tints the selected row with the primary colour, which turns muddy
+     * against a dark surface once the host sets a warm brand colour. A neutral
+     * tint plus a coloured edge marks the selection without recolouring the row.
+     */
+    '&.Mui-selected, &.Mui-selected:hover': {
+      backgroundColor: theme.palette.action.selected,
+    },
+    '&.Mui-selected::before': {
+      content: '""',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 3,
+      backgroundColor: theme.palette.primary.main,
+    },
   },
 }));
 

@@ -1,6 +1,9 @@
 import { JsonService } from '../../../services/json';
 import { OrderEnum } from '../../../typings/gql';
-import redisInfo from 'redis-info';
+// redis-info ships no types of its own, and @types/redis-info is a dev-only
+// dependency. Requiring it lazily with a local shape keeps it out of the
+// published declarations, so consumers do not need the types installed.
+type TRedisInfo = Record<string, string | number | undefined>;
 import { PowerSearch } from '../../../data-search';
 import isNil from 'lodash/isNil';
 import { BullMonitorError } from '../../../errors';
@@ -155,12 +158,14 @@ export class BullDataSource {
     const queue = this.getQueueById(id);
     return await queue?.count();
   }
-  public async getRedisInfo() {
+  public async getRedisInfo(): Promise<Maybe<TRedisInfo> | null> {
     if (this._queuesMap.size > 0) {
       const firstQueue = this._queues[0];
       const client = await firstQueue.client;
       const rawInfo = await client.info();
-      return redisInfo.parse(rawInfo);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const parse = require('redis-info').parse as (info: string) => TRedisInfo;
+      return parse(rawInfo);
     }
     return null;
   }

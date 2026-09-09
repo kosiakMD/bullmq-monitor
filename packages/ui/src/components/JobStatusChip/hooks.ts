@@ -3,42 +3,45 @@ import { useMemo } from 'react';
 import { useThemeStore } from '@/stores/theme';
 import { ServerThemeConfig, themeColorsFor } from '@/config/ui';
 import type { TThemeMode } from '@/config/ui';
+import {
+  deepPurple,
+  grey,
+  cyan,
+  red,
+  green,
+  blue,
+  amber,
+} from '@mui/material/colors';
 
 /**
- * Job statuses are colour-coded so a queue can be read at a glance, which means
- * the colours have to stay distinguishable in both schemes. The two sets below
- * are tuned for that: deeper tones on a light surface, lighter ones on a dark
- * surface, and no heavy blue, which turned muddy against dark backgrounds.
+ * Job statuses are colour-coded so a queue can be read at a glance.
+ *
+ * These are the long-standing colours of the project. The only per-scheme
+ * difference is "delayed": the original blue is a 800 tone, which turns muddy
+ * against a dark surface, so dark mode uses a lighter one.
  *
  * The host application can override any status through
- * `ui.theme.statusColors` (globally or per scheme).
+ * `ui.theme.statusColors`, globally or per scheme.
  */
-const LIGHT: Record<JobStatus, string> = {
-  [JobStatus.Waiting]: '#6C4AC7',
-  [JobStatus.Active]: '#0F8B8D',
-  [JobStatus.Completed]: '#0F860F',
-  [JobStatus.Failed]: '#D92D20',
-  [JobStatus.Delayed]: '#B26A00',
-  [JobStatus.Prioritized]: '#AB0F3E',
-  [JobStatus.Paused]: '#64748B',
-  [JobStatus.Stuck]: '#8A8FA6',
-  [JobStatus.Unknown]: '#A9AEC0',
+const BASE: Record<JobStatus, string> = {
+  [JobStatus.Failed]: red[500],
+  [JobStatus.Completed]: green[500],
+  [JobStatus.Delayed]: blue[800],
+  [JobStatus.Waiting]: deepPurple[500],
+  [JobStatus.Paused]: grey[600],
+  [JobStatus.Active]: cyan[500],
+  [JobStatus.Prioritized]: amber[700],
+  [JobStatus.Stuck]: grey[400],
+  [JobStatus.Unknown]: grey[300],
 };
 
-const DARK: Record<JobStatus, string> = {
-  [JobStatus.Waiting]: '#A78BFA',
-  [JobStatus.Active]: '#4DD0C7',
-  [JobStatus.Completed]: '#4CC26A',
-  [JobStatus.Failed]: '#FF6B6B',
-  [JobStatus.Delayed]: '#FFB74D',
-  [JobStatus.Prioritized]: '#FF7EB6',
-  [JobStatus.Paused]: '#94A3B8',
-  [JobStatus.Stuck]: '#7A7F96',
-  [JobStatus.Unknown]: '#5F6478',
+const DARK_OVERRIDES: Partial<Record<JobStatus, string>> = {
+  [JobStatus.Delayed]: blue[400],
 };
 
 const buildPalette = (mode: TThemeMode): Record<JobStatus, string> => {
-  const base = mode === 'dark' ? DARK : LIGHT;
+  const base =
+    mode === 'dark' ? { ...BASE, ...DARK_OVERRIDES } : { ...BASE };
   const overrides = themeColorsFor(ServerThemeConfig, mode).statusColors;
   if (!overrides) return base;
   return { ...base, ...overrides } as Record<JobStatus, string>;

@@ -68,13 +68,18 @@ original packages.
   count. It now reports what is actually loaded.
 - `BullMQAdapter` no longer pins consumers to the bullmq version this package
   was built against; its queue parameter is typed structurally.
+- The published type declarations no longer reference `bull` or `redis-info`.
+  Both are optional or dev-only, so a consumer type-checking with
+  `skipLibCheck: false` failed on our own `.d.ts` files.
 - Importing the package no longer requires `bull`. It is an optional peer
   dependency, but the entry point pulled it in eagerly, so any app that only
   uses BullMQ crashed on import.
 - The top bar no longer floods the page with the brand colour; it uses the
   surface colour and follows the configured palette.
-- The status palette dropped the heavy blue that turned muddy on dark
-  backgrounds, and now has separate light and dark sets.
+- In dark mode the delayed status keeps the project's blue but in a lighter
+  tone, which the original 800 shade turned muddy against a dark surface.
+- The selected queue in the drawer is tinted neutrally instead of with the
+  brand colour, which went brown once a warm accent was configured.
 
 ### Dependencies
 

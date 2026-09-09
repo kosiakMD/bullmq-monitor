@@ -8,7 +8,7 @@ import type {
   GlobalJobCompletionCb,
 } from './queue';
 import { JobStatus } from './queue';
-import type { Queue as BullQueue, Job as BullJob } from 'bull';
+import type { BullQueueLike, BullJobLike } from './typings/bull';
 import type { Maybe } from './typings/utils';
 
 /**
@@ -30,7 +30,7 @@ const loadBull = (): any => {
 
 export class BullJobAdapter extends Job {
   constructor(
-    private _job: BullJob,
+    private _job: BullJobLike,
     private _queue: Queue,
     private _knownStatus?: JobStatus
   ) {
@@ -38,7 +38,7 @@ export class BullJobAdapter extends Job {
   }
 
   // getters
-  public get rawJob(): BullJob {
+  public get rawJob(): BullJobLike {
     return this._job;
   }
 
@@ -136,7 +136,7 @@ export class BullAdapter extends Queue {
   private _globalJobCompletionCb?: GlobalJobCompletionCb;
 
   constructor(
-    private _queue: BullQueue,
+    private _queue: BullQueueLike,
     config?: QueueConfig
   ) {
     super(_queue, config);
@@ -298,7 +298,7 @@ export class BullAdapter extends Queue {
   }
 
   // private methods
-  private normalizeJob(job: BullJob, knownStatus?: JobStatus): Job {
+  private normalizeJob(job: BullJobLike, knownStatus?: JobStatus): Job {
     return new BullJobAdapter(job, this, knownStatus);
   }
 }
