@@ -20,6 +20,9 @@ original packages.
   `ui.filterPresets`. A preset sets the status, name and data search together;
   a `{{value}}` placeholder makes the dashboard prompt for an id first, so one
   preset covers lookups by organization, order or customer.
+- **Per-scheme logo.** `ui.logo.darkPath` supplies a second image for dark
+  mode, since a single-colour wordmark drawn for one scheme vanishes in the
+  other.
 - **Branding from the host app.** A new `ui` option sets the title, logo,
   favicon, extra top-bar links, date formats and colours without rebuilding the
   dashboard. Light and dark palettes are configured separately, down to
@@ -80,6 +83,9 @@ original packages.
   tone, which the original 800 shade turned muddy against a dark surface.
 - The selected queue in the drawer is tinted neutrally instead of with the
   brand colour, which went brown once a warm accent was configured.
+- The selected status filter takes the colour of its own status rather than the
+  brand colour, so the row keeps reading as a legend instead of turning every
+  selection into one colour.
 
 ### Dependencies
 

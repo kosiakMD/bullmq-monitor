@@ -87,16 +87,22 @@ export default function JobsFilters() {
   return (
     <Paper className={cls.root}>
       <div className={cls.statuses}>
-        {counts.map(({ value, label, isActive, onClick }, idx) => (
+        {counts.map(({ value, label, isActive, onClick, color }, idx) => (
           <Chip
-            classes={{
-              avatar: cls.count,
-            }}
+            classes={{ avatar: cls.count }}
             avatar={<div>{value}</div>}
             key={idx}
             onClick={onClick}
-            color={isActive ? 'primary' : 'default'}
             label={label}
+            sx={
+              isActive
+                ? {
+                    backgroundColor: color,
+                    color: (theme) => theme.palette.getContrastText(color),
+                    '&:hover': { backgroundColor: color, filter: 'brightness(1.1)' },
+                  }
+                : undefined
+            }
           />
         ))}
       </div>

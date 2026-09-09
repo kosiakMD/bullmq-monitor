@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { ServerUiConfig } from '@/config/ui';
+import { useThemeStore } from '@/stores/theme';
 
 type TProps = {
   className?: string;
@@ -19,13 +20,16 @@ const DEFAULT_TITLE = 'BullMQ Monitor';
  */
 const Logo = ({ className, color = 'inherit' }: TProps) => {
   const { logo, title } = ServerUiConfig;
+  const mode = useThemeStore((state) => state.theme);
 
   if (logo?.path) {
+    // a single-colour wordmark drawn for one scheme vanishes in the other
+    const src = mode === 'dark' && logo.darkPath ? logo.darkPath : logo.path;
     return (
       <Box
         className={className}
         component="img"
-        src={logo.path}
+        src={src}
         alt={logo.alt || title || DEFAULT_TITLE}
         sx={{
           display: 'block',

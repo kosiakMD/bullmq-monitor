@@ -161,7 +161,7 @@ new BullMonitorExpress({
   queues,
   ui: {
     title: 'Acme Queues',
-    logo: { path: '/static/logo.svg', height: 26 },
+    logo: { path: '/static/logo.svg', darkPath: '/static/logo-white.svg', height: 26 },
     favicon: { default: '/static/favicon.ico', alternative: '/static/favicon-dark.svg' },
     links: [{ text: 'Back to admin', url: '/admin' }],
     // dayjs tokens: https://day.js.org/docs/en/display/format
@@ -218,7 +218,7 @@ built-in colour.
 | Field | Meaning |
 | --- | --- |
 | `title` | Page title and the text wordmark |
-| `logo` | `{ path, width?, height?, alt? }`, replaces the wordmark |
+| `logo` | `{ path, darkPath?, width?, height?, alt? }`, replaces the wordmark. `darkPath` is used in dark mode |
 | `favicon` | `{ default, alternative? }`, rendered as `<link rel="icon">` |
 | `links` | Extra links in the top bar |
 | `dateFormats` | `{ short, full }` dayjs formats for the table and job details |

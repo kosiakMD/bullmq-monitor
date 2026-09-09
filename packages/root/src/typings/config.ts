@@ -69,6 +69,11 @@ export type UiThemeConfig = UiThemeColors & {
 export type UiLogoConfig = {
   /** url of the image, absolute or relative to the page */
   path: string;
+  /**
+   * url used in dark mode. A wordmark drawn for a dark sidebar disappears on a
+   * light one, so supply both when your logo is a single flat colour.
+   */
+  darkPath?: string;
   width?: number | string;
   height?: number | string;
   /** accessible text, defaults to the dashboard title */

@@ -43,6 +43,7 @@ export type TServerUiConfig = {
   title?: string;
   logo?: {
     path: string;
+    darkPath?: string;
     width?: number | string;
     height?: number | string;
     alt?: string;
