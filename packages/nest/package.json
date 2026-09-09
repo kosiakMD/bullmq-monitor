@@ -1,0 +1,40 @@
+{
+  "name": "@bullmq-monitor/nest",
+  "version": "6.0.0",
+  "description": "NestJS module for BullMQ Monitor - a dashboard for BullMQ and Bull queues",
+  "keywords": ["bullmq", "bull", "nestjs", "nest", "queue", "dashboard", "monitor"],
+  "author": "Anton Kosiak (https://github.com/kosiakMD)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kosiakMD/bullmq-monitor.git",
+    "directory": "packages/nest"
+  },
+  "homepage": "https://github.com/kosiakMD/bullmq-monitor/tree/main/packages/nest#readme",
+  "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "engines": { "node": ">=20" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "clean": "rm -rf ./dist",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsc -p tsconfig.json --watch"
+  },
+  "dependencies": {
+    "@bullmq-monitor/root": "^6.0.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0 || ^11.0.0 || ^12.0.0",
+    "@nestjs/core": "^10.0.0 || ^11.0.0 || ^12.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "typescript": "^5.9.0"
+  }
+}

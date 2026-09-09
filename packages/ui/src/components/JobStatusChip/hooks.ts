@@ -1,5 +1,13 @@
 import { JobStatus } from '@/typings/gql';
-import { deepPurple, grey, cyan, red, green, blue } from '@mui/material/colors';
+import {
+  deepPurple,
+  grey,
+  cyan,
+  red,
+  green,
+  blue,
+  amber,
+} from '@mui/material/colors';
 
 const palette: Record<JobStatus, string> = {
   [JobStatus.Failed]: red[500],
@@ -9,6 +17,7 @@ const palette: Record<JobStatus, string> = {
   [JobStatus.Paused]: grey[600],
   [JobStatus.Active]: cyan[500],
   [JobStatus.Stuck]: grey[400],
+  [JobStatus.Prioritized]: amber[700],
   [JobStatus.Unknown]: grey[300],
 };
 export const useJobStatusesPalette = () => palette;

@@ -14,7 +14,11 @@ import type { Maybe } from './typings/utils';
 import * as Bull from 'bull';
 
 export class BullJobAdapter extends Job {
-  constructor(private _job: BullJob, private _queue: Queue) {
+  constructor(
+    private _job: BullJob,
+    private _queue: Queue,
+    private _knownStatus?: JobStatus
+  ) {
     super();
   }
 
@@ -77,6 +81,10 @@ export class BullJobAdapter extends Job {
 
   // public methods
   public async getState(): Promise<JobStatus> {
+    // jobs hydrated from a status scan already know their state
+    if (this._knownStatus) {
+      return this._knownStatus;
+    }
     return this._job.getState() as any;
   }
 
@@ -112,7 +120,10 @@ export class BullAdapter extends Queue {
   private _id: string;
   private _globalJobCompletionCb?: GlobalJobCompletionCb;
 
-  constructor(private _queue: BullQueue, config?: QueueConfig) {
+  constructor(
+    private _queue: BullQueue,
+    config?: QueueConfig
+  ) {
     super(_queue, config);
     this._id = Buffer.from(this._queue.clientName()).toString('base64');
   }
@@ -133,17 +144,21 @@ export class BullAdapter extends Queue {
     return this._queue.name;
   }
 
+  public get keyPrefix(): string {
+    return (this._queue as any).keyPrefix || 'bull';
+  }
+
   public get token(): string {
     return '';
   }
 
   // setters
-  public set onGlobalJobCompletion(callback: GlobalJobCompletionCb) {
+  public set onGlobalJobCompletion(callback: GlobalJobCompletionCb | null) {
     const oldCb = this._globalJobCompletionCb;
     if (oldCb) {
       this._queue.off('global:completed', oldCb);
     }
-    this._globalJobCompletionCb = callback;
+    this._globalJobCompletionCb = callback || undefined;
     if (callback) {
       this._queue.on('global:completed', callback);
     }
@@ -197,23 +212,39 @@ export class BullAdapter extends Queue {
       return this.normalizeJob(job);
     }
   }
-  public jobFromJSON(json: any, jobId: JobId): Job {
-    // @ts-ignore
-    return this.normalizeJob(Bull.Job.fromJSON(this._queue, json, jobId));
+  public jobFromJSON(json: any, jobId: JobId, knownStatus?: JobStatus): Job {
+    // Bull.Job.fromJSON exists at runtime but is missing from the typings
+    return this.normalizeJob(
+      (Bull as any).Job.fromJSON(this._queue, json, jobId),
+      knownStatus
+    );
   }
 
   public async getJobs(
-    status: JobStatus,
+    types: JobStatus | JobStatus[],
     start?: number,
     end?: number,
     asc?: boolean
   ): Promise<Job[]> {
-    const jobs = await this._queue.getJobs([status as any], start, end, asc);
+    const statuses = (Array.isArray(types) ? types : [types]) as any[];
+    const jobs = await this._queue.getJobs(statuses, start, end, asc);
     return jobs.map((job) => this.normalizeJob(job));
   }
 
   public async getJobCounts(): Promise<JobCounts> {
-    return this._queue.getJobCounts() as any;
+    const counts = (await this._queue.getJobCounts()) as unknown as Record<
+      string,
+      number
+    >;
+    return {
+      waiting: counts.waiting ?? 0,
+      active: counts.active ?? 0,
+      completed: counts.completed ?? 0,
+      failed: counts.failed ?? 0,
+      delayed: counts.delayed ?? 0,
+      paused: counts.paused ?? 0,
+      prioritized: 0,
+    };
   }
 
   public async getActiveCount(): Promise<number> {
@@ -252,7 +283,7 @@ export class BullAdapter extends Queue {
   }
 
   // private methods
-  private normalizeJob(job: BullJob): Job {
-    return new BullJobAdapter(job, this);
+  private normalizeJob(job: BullJob, knownStatus?: JobStatus): Job {
+    return new BullJobAdapter(job, this, knownStatus);
   }
 }

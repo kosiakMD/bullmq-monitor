@@ -6,6 +6,7 @@ import {
   activeWorkspaceAtom,
   dataSearchAtom,
   jobIdAtom,
+  jobNameAtom,
   jobsOrderAtom,
 } from '@/atoms/workspaces';
 import type { TAddWorkspaceDto } from '@/atoms/workspaces';
@@ -23,8 +24,7 @@ export enum EShareStrategy {
   SINGLE_JOB,
 }
 type TShareDto =
-  | [EShareStrategy.WORKSPACE]
-  | [EShareStrategy.SINGLE_JOB, string];
+  [EShareStrategy.WORKSPACE] | [EShareStrategy.SINGLE_JOB, string];
 
 export const useShareActiveWorkspace = () => {
   const share = useShare();
@@ -76,6 +76,7 @@ const extractData = (get: Getter, dto: TShareDto): TAddWorkspaceDto => {
         status: get(activeStatusAtom),
         order: get(jobsOrderAtom),
         jobId: get(jobIdAtom),
+        jobName: get(jobNameAtom),
         dataSearch: get(dataSearchAtom),
       };
     case EShareStrategy.SINGLE_JOB:

@@ -14,7 +14,7 @@ type TState = {
   changeField: (field: TSortField) => void;
 };
 
-export const useQueuesSortStore = createStore<TState>(
+export const useQueuesSortStore = createStore<TState>()(
   persist(
     (set) => ({
       field: null,

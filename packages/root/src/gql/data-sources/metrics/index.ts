@@ -1,12 +1,9 @@
-import { DataSource } from 'apollo-datasource';
 import { MetricsCollector } from '../../../metrics-collector';
 import { BullMonitorError } from '../../../errors';
 import { MetricsErrorEnum as ErrorEnum } from './errors-enum';
 
-export class MetricsDataSource extends DataSource {
-  constructor(private _internalCollector?: MetricsCollector) {
-    super();
-  }
+export class MetricsDataSource {
+  constructor(private _internalCollector?: MetricsCollector) {}
   public async getMetrics(queue: string, start?: number, end?: number) {
     return await this._collector.extract(queue, start, end);
   }
@@ -19,16 +16,10 @@ export class MetricsDataSource extends DataSource {
     return true;
   }
 
-  private _throwInternalError(e: ErrorEnum) {
-    throw new BullMonitorError(e);
-  }
-  private _throwNoCollector() {
-    this._throwInternalError(ErrorEnum.NO_COLLECTOR);
-  }
-  private get _collector() {
+  private get _collector(): MetricsCollector {
     if (!this._internalCollector) {
-      this._throwNoCollector();
+      throw new BullMonitorError(ErrorEnum.NO_COLLECTOR);
     }
-    return this._internalCollector as NonNullable<MetricsCollector>;
+    return this._internalCollector;
   }
 }

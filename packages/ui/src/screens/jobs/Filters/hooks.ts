@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { JobStatus } from '@/typings/gql';
 import { useQueueData } from '@/hooks/use-queue-data';
 import { activeQueueAtom, activeStatusAtom } from '@/atoms/workspaces';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { useAtom } from 'jotai';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';

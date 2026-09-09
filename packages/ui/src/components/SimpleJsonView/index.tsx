@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 type TProps = {
   className?: string;
 };
-const SimpleJsonView: React.FC<TProps> = (props) => {
+const SimpleJsonView: React.FC<React.PropsWithChildren<TProps>> = (props) => {
   const cls = useStyles();
   return (
     <pre className={clsx([cls.root, props.className])}>{props.children}</pre>

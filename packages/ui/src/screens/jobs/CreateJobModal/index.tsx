@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import makeStyles from '@mui/styles/makeStyles';
 import FormLabel from '@mui/material/FormLabel';
 import { activeQueueAtom } from '@/atoms/workspaces';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import Grid from '@mui/material/Grid';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';

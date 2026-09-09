@@ -15,6 +15,7 @@ export type TWorkspace = {
   page?: number;
   status?: JobStatus;
   jobId?: string;
+  jobName?: string;
   order?: OrderEnum;
   dataSearch?: string;
   queue: string;
@@ -100,6 +101,12 @@ export const jobIdAtom = atom(
     set(activeWorkspaceAtom, { jobId, page: 0 });
   }
 );
+export const jobNameAtom = atom(
+  (get) => get(activeWorkspaceAtom)?.jobName ?? '',
+  (_get, set, jobName: string) => {
+    set(activeWorkspaceAtom, { jobName, page: 0 });
+  }
+);
 export const dataSearchAtom = atom(
   (get) => get(activeWorkspaceAtom)?.dataSearch ?? '',
   (_get, set, dataSearch: string) => {
@@ -130,6 +137,17 @@ export const addWorkspaceAtom = atom(
 );
 export const clearDataSearchAtom = atom(null, (_get, set) => {
   set(activeWorkspaceAtom, { dataSearch: '' });
+});
+export const clearJobNameAtom = atom(null, (_get, set) => {
+  set(activeWorkspaceAtom, { jobName: '' });
+});
+/** true when any job filter is active, used to show the "clear filters" button */
+export const hasActiveFiltersAtom = atom((get) => {
+  const ws = get(activeWorkspaceAtom);
+  return Boolean(ws?.jobId || ws?.jobName || ws?.dataSearch);
+});
+export const clearAllFiltersAtom = atom(null, (_get, set) => {
+  set(activeWorkspaceAtom, { jobId: '', jobName: '', dataSearch: '', page: 0 });
 });
 
 export const removeWorkspaceAtom = atom(null, (get, set, id: string) => {

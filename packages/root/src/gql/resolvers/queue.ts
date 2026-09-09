@@ -7,6 +7,9 @@ import type {
 
 export const queueResolver: TResolvers = {
   Queue: {
+    keyPrefix(parent: Queue): GqlQueue['keyPrefix'] {
+      return parent.keyPrefix;
+    },
     async count(parent: Queue): Promise<GqlQueue['count']> {
       return await parent.count();
     },

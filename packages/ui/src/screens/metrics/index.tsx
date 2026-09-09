@@ -4,7 +4,7 @@ import ProcessingTime from './charts/ProcessingTime';
 import Actions from './Actions';
 import { useQuery } from 'react-query';
 import { useNetwork } from '@/hooks/use-network';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { activeQueueAtom } from '@/atoms/workspaces';
 import NetworkRequest from '@/components/NetworkRequest';
 import { getPollingInterval } from '@/stores/network-settings';

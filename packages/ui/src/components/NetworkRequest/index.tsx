@@ -17,7 +17,7 @@ type TProps = {
 const extractErrorMessage = (e?: any) => {
   return e?.response?.errors?.[0]?.message;
 };
-const NetworkRequest: React.FC<TProps> = (props) => {
+const NetworkRequest: React.FC<React.PropsWithChildren<TProps>> = (props) => {
   const classes = useStyles();
   if (props.status === 'loading') {
     return <Spin centered className={classes.spin} />;

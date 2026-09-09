@@ -12,10 +12,10 @@ import Box from '@mui/material/Box';
 import Network from './Network';
 import Typography from '@mui/material/Typography';
 
-const Section: React.FC = ({ children }) => (
+const Section: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <Box marginBottom={2.5}>{children}</Box>
 );
-const Header: React.FC = ({ children }) => (
+const Header: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <Typography
     style={{
       marginBottom: '-5px',

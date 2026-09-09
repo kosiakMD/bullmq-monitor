@@ -3,6 +3,8 @@ import TextField from '@mui/material/TextField';
 import { SUPPORTED_PALETTES, useThemeStore } from '@/stores/theme';
 import shallow from 'zustand/shallow';
 import MenuItem from '@mui/material/MenuItem';
+import Alert from '@mui/material/Alert';
+import { ServerThemeConfig } from '@/config/ui';
 
 export default function AppearanceSettings() {
   const [theme, palette, changeTheme, changePalette] = useThemeStore(
@@ -14,6 +16,16 @@ export default function AppearanceSettings() {
     ],
     shallow
   );
+  if (ServerThemeConfig.lock) {
+    return (
+      <Alert severity="info">
+        Appearance is set by the application hosting this dashboard.
+      </Alert>
+    );
+  }
+  const customPrimary =
+    !!ServerThemeConfig.primary &&
+    !SUPPORTED_PALETTES.includes(ServerThemeConfig.primary as any);
   return (
     <div>
       <TextField
@@ -37,7 +49,13 @@ export default function AppearanceSettings() {
         fullWidth
         select
         id="appearance_palette"
-        label="Theme"
+        label="Palette"
+        disabled={customPrimary}
+        helperText={
+          customPrimary
+            ? 'The application sets a custom primary colour'
+            : undefined
+        }
       >
         {SUPPORTED_PALETTES.map((p) => (
           <MenuItem key={p} value={p}>

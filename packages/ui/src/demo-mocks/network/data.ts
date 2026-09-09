@@ -8,6 +8,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 const QUEUES_AMOUNT = 10;
 const JOBS_AMOUNT = 100;
+const JOB_NAMES = [
+  'send-email',
+  'send-sms',
+  'send-push',
+  'generate-invoice-pdf',
+  'generate-report',
+  'sync-crm-contacts',
+  'cleanup-temp-files',
+  '__default__',
+];
 
 const jobStatuses = without(
   Object.values(JobStatus),
@@ -41,7 +51,7 @@ const generateData = () => {
       finishedOn: isFailedOrCompleted ? timestamp : null,
       delay,
       timestamp,
-      name: '__default__',
+      name: sample(JOB_NAMES) as string,
       opts: JSON.stringify(
         {
           timestamp,

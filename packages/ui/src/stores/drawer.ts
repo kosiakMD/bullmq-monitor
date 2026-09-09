@@ -13,7 +13,7 @@ type TState = {
   close: () => void;
 };
 
-export const useDrawerState = createStore<TState>(
+export const useDrawerState = createStore<TState>()(
   persist(
     (set) => ({
       isOpen: false,

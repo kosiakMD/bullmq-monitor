@@ -33,12 +33,12 @@ export const useRunRefetchJobsLockSideEffects = () => {
       }
     };
     const unsubDataEditor = useDataEditorStore.subscribe(
-      modalEffect,
-      (state) => state.isOpen
+      (state) => state.isOpen,
+      modalEffect
     );
     const unsubJobLogs = useJobLogsStore.subscribe(
-      modalEffect,
-      (state) => state.isOpen
+      (state) => state.isOpen,
+      modalEffect
     );
     return () => {
       unsubDataEditor();

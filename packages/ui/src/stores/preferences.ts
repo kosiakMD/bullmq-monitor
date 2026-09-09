@@ -16,7 +16,7 @@ type TState = {
   toggleExpandJobReturnValue: () => void;
   toggleExpandJobStackTrace: () => void;
 };
-export const usePreferencesStore = createStore<TState>(
+export const usePreferencesStore = createStore<TState>()(
   persist(
     (set) => ({
       confirmDangerousActions: true,

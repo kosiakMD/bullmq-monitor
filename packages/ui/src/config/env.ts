@@ -1,8 +1,8 @@
-// @ts-nocheck
+const env = (import.meta as any).env ?? {};
+const useMocks = env.VITE_ENABLE_MOCKS === 'true';
 
-const useMocks = import.meta.env.VITE_ENABLE_MOCKS === 'true';
 export const EnvConfig = {
-  dev: import.meta.env.MODE === 'development',
+  dev: env.MODE === 'development',
   demo: useMocks,
   useMocks,
 };

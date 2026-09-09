@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-core';
-
-export const jobTypeDef = gql`
+export const jobTypeDef = /* GraphQL */ `
   enum JobStatus {
     completed
     waiting

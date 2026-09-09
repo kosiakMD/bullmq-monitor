@@ -11,7 +11,7 @@ type TState = {
   toggleScreen: () => void;
 };
 
-export const useActiveScreenStore = createStore<TState>(
+export const useActiveScreenStore = createStore<TState>()(
   persist(
     (set, get) => ({
       screen: 'jobs',

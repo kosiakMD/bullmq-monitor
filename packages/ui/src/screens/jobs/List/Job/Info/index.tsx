@@ -5,6 +5,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
 import { useFormatDateTime } from '@/hooks/use-format-date-time';
+import { DateFormatsConfig } from '@/config/ui';
 import { JobStatus } from '@/typings/gql';
 import { useActiveStep } from './hooks';
 import makeStyles from '@mui/styles/makeStyles';
@@ -27,12 +28,12 @@ const useStyles = makeStyles((theme) => ({
 type TProps = Pick<TJobProps, 'job'>;
 export default function JobInfo({ job }: TProps) {
   const cls = useStyles();
-  const queueDate = useFormatDateTime(job.timestamp);
-  const processDate = useFormatDateTime(job.processedOn);
+  const queueDate = useFormatDateTime(job.timestamp, DateFormatsConfig.full);
+  const processDate = useFormatDateTime(job.processedOn, DateFormatsConfig.full);
   const delay = job.delay;
   const delayTimestamp = job.timestamp && delay ? job.timestamp + delay : null;
-  const delayDate = useFormatDateTime(delayTimestamp);
-  const finishDate = useFormatDateTime(job.finishedOn);
+  const delayDate = useFormatDateTime(delayTimestamp, DateFormatsConfig.full);
+  const finishDate = useFormatDateTime(job.finishedOn, DateFormatsConfig.full);
   const activeStep = useActiveStep({ job, delayTimestamp });
   const isFailed = job.status === JobStatus.Failed;
   const returnData = isFailed ? job.failedReason : job.returnValue;

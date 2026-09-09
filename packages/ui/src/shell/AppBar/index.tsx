@@ -24,6 +24,9 @@ import { EnvConfig } from '@/config/env';
 import { useQueryClient } from 'react-query';
 import { QueryKeysConfig } from '@/config/query-keys';
 import { useNetwork } from '@/hooks/use-network';
+import Button from '@mui/material/Button';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { ServerUiConfig } from '@/config/ui';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -73,8 +76,20 @@ export default memo(function AppBar() {
         >
           <MenuIcon />
         </IconButton>
-        <Logo fill="white" width="130" />
+        <Logo />
         <Box className={classes.right} marginLeft="auto">
+          {ServerUiConfig.links?.map(({ text, url }) => (
+            <Button
+              key={`${text}-${url}`}
+              href={url}
+              component="a"
+              color="inherit"
+              size="small"
+              endIcon={<OpenInNewIcon fontSize="small" />}
+            >
+              {text}
+            </Button>
+          ))}
           {EnvConfig.demo && (
             <Tooltip title="Github repository">
               <IconButton

@@ -11,13 +11,14 @@ export const JobResolver: TResolvers = {
     delayed: 'delayed',
     failed: 'failed',
     paused: 'paused',
+    prioritized: 'prioritized',
   },
   Job: {
     data({ data }: Job): GqlJob['data'] {
       return JsonService.maybeStringify(data);
     },
     delay({ opts }: Job): GqlJob['delay'] {
-      return opts.delay;
+      return opts?.delay;
     },
     processingTime(
       job: Job,
@@ -36,7 +37,7 @@ export const JobResolver: TResolvers = {
       return job.progress;
     },
     opts(job: Job): GqlJob['opts'] {
-      return JsonService.maybeStringify(job.opts);
+      return JsonService.maybeStringify(job.opts) ?? '{}';
     },
     status(job: Job): Promise<GqlJob['status']> {
       return job.getState();

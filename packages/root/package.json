@@ -1,47 +1,62 @@
 {
-  "name": "@bull-monitor/root",
-  "version": "5.4.0",
+  "name": "@bullmq-monitor/root",
+  "version": "6.0.0",
+  "description": "BullMQ Monitor core: GraphQL API, queue adapters and the bundled dashboard UI",
+  "keywords": ["bullmq", "bull", "queue", "dashboard", "monitor", "redis", "graphql"],
+  "author": "Anton Kosiak (https://github.com/kosiakMD)",
+  "contributors": ["Ilya Strus <strax1990@gmail.com> (original bull-monitor author)"],
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s-r-x/bull-monitor.git",
+    "url": "https://github.com/kosiakMD/bullmq-monitor.git",
     "directory": "packages/root"
   },
-  "description": "bull-monitor core",
-  "keywords": [
-    "bull"
-  ],
-  "author": "Ilya Strus <strax1990@gmail.com>",
-  "license": "MIT",
+  "homepage": "https://github.com/kosiakMD/bullmq-monitor#readme",
+  "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": ["dist", "ui", "README.md"],
   "engines": {
-    "node": ">=12"
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
-    "build": "npm run clean && npm run compile",
-    "clean": "rm -rf ./dist",
-    "compile": "tsc",
-    "dev": "tsc --watch"
+    "build": "npm run clean && tsc -p tsconfig.json && npm run copy-ui",
+    "clean": "rm -rf ./dist ./ui",
+    "copy-ui": "node ./scripts/copy-ui.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsc -p tsconfig.json --watch"
   },
-  "main": "dist/index.js",
   "dependencies": {
-    "graphql": "^15.5.0",
-    "graphql-scalars": "^1.9.0",
-    "jsonata": "^1.8.5",
+    "@apollo/server": "^5.0.0",
+    "graphql": "^16.11.0",
+    "graphql-scalars": "^1.24.0",
+    "jsonata": "^2.0.6",
     "lodash": "^4.17.21",
-    "redis-info": "^3.0.8",
-    "toad-scheduler": "^1.4.0"
+    "redis-info": "^3.1.0",
+    "toad-scheduler": "^3.0.1"
+  },
+  "peerDependencies": {
+    "bull": ">=4.0.0",
+    "bullmq": ">=5.0.0",
+    "ioredis": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "bull": { "optional": true },
+    "bullmq": { "optional": true },
+    "ioredis": { "optional": true }
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.21.3",
-    "@graphql-codegen/typescript": "^1.21.1",
-    "@graphql-codegen/typescript-operations": "^1.17.15",
-    "@types/bull": "^3.15.0",
-    "@types/lodash": "^4.14.169",
-    "@types/redis-info": "^3.0.0",
-    "apollo-server-core": "^3.6.3",
-    "bull": "^3.27.0",
-    "bullmq": "^1.57.2",
-    "typescript": "^4.5.3"
-  },
-  "gitHead": "56060c20da8134cce74efaf278dd63b81cdcab4f"
+    "@bullmq-monitor/ui": "^6.0.0",
+    "@types/bull": "^4.10.4",
+    "@types/lodash": "^4.17.0",
+    "@types/redis-info": "^3.0.3",
+    "bull": "^4.16.0",
+    "bullmq": "^6.0.0",
+    "ioredis": "^5.4.0",
+    "typescript": "^5.9.0"
+  }
 }

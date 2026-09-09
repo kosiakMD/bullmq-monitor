@@ -7,7 +7,7 @@ type TState = {
   changeName: (name: string) => void;
 };
 
-export const useQueuesFilterStore = createStore<TState>(
+export const useQueuesFilterStore = createStore<TState>()(
   persist(
     (set) => ({
       name: '',

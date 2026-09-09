@@ -2,7 +2,7 @@ import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { activeQueueAtom } from '@/atoms/workspaces';
 import { useAbstractMutation } from '@/hooks/use-abstract-mutation';
 import { useNetwork } from '@/hooks/use-network';

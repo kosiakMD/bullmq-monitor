@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-core';
-
-export const metricsTypeDef = gql`
+export const metricsTypeDef = /* GraphQL */ `
   type QueueMetrics {
     timestamp: Float!
     counts: QueueJobsCounts!

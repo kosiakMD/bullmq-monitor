@@ -1,52 +1,40 @@
-# @bull-monitor/hapi
+# @bullmq-monitor/hapi
 
-[Hapi](https://github.com/hapijs/hapi) adapter for [bull-monitor](https://github.com/s-r-x/bull-monitor)
+Hapi adapter for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
+Supports Hapi 20 and Hapi 21.
+
+```bash
+npm i @bullmq-monitor/hapi
+```
 
 ## Usage
 
-```sh
-npm i @bull-monitor/hapi
-```
-
-```typescript
-import { BullMonitorHapi } from '@bull-monitor/hapi';
+```ts
 import Hapi from '@hapi/hapi';
-import { BullAdapter } from '@bull-monitor/root/dist/bull-adapter';
-// for BullMQ users
-// import { BullMQAdapter } from "@bull-monitor/root/dist/bullmq-adapter";
-import Queue from 'bull';
+import { Queue } from 'bullmq';
+import { BullMonitorHapi } from '@bullmq-monitor/hapi';
+import { BullMQAdapter } from '@bullmq-monitor/root';
 
-(async () => {
-  const server = new Hapi.server({
-    port: 3000,
-    host: 'localhost',
-  });
-  const monitor = new BullMonitorHapi({
-    queues: [
-      new BullAdapter(new Queue('1', 'REDIS_URI')),
-      // readonly queue
-      new BullAdapter(new Queue('2', 'REDIS_URI'), { readonly: true }),
-    ],
-    baseUrl: '/my/url',
-    // enables graphql introspection query. false by default if NODE_ENV == production, true otherwise
-    gqlIntrospection: true,
-    // enable metrics collector. false by default
-    // metrics are persisted into redis as a list
-    // with keys in format "bull_monitor::metrics::{{queue}}"
-    metrics: {
-      // collect metrics every X
-      // where X is any value supported by https://github.com/kibertoad/toad-scheduler
-      collectInterval: { hours: 1 },
-      maxMetrics: 100,
-      // disable metrics for specific queues
-      blacklist: ['1'],
-    },
-  });
-  await monitor.init();
-  await server.register(monitor.plugin);
-  await server.start();
+const server = Hapi.server({ port: 3000, host: 'localhost' });
+const monitor = new BullMonitorHapi({
+  queues: [new BullMQAdapter(new Queue('emails', { connection }))],
+  // required: hapi routes are absolute
+  baseUrl: '/admin/queues',
+});
 
-  // replace queues
-  monitor.setQueues([new BullAdapter(new Queue('3', 'REDIS_URI'))]);
-})();
+await monitor.init();
+await server.register(monitor.plugin);
+await server.start();
 ```
+
+## Auth
+
+Pass the name of a registered strategy and it is applied to every route:
+
+```ts
+await monitor.init({ auth: 'simple' });
+```
+
+## License
+
+MIT

@@ -1,5 +1,4 @@
-import { QueueProvider } from './typings/gql';
-import { JobStatus } from './typings/gql';
+import { QueueProvider, JobStatus } from './typings/gql';
 import type { Redis, Cluster } from 'ioredis';
 import type {
   JobStatusClean,
@@ -51,7 +50,10 @@ export abstract class Job {
 }
 
 export abstract class Queue {
-  constructor(_queue: any, protected _config?: QueueConfig) {}
+  constructor(
+    _queue: any,
+    protected _config?: QueueConfig
+  ) {}
   public get readonly(): boolean {
     return this._config?.readonly ?? false;
   }
@@ -59,6 +61,7 @@ export abstract class Queue {
   public abstract get client(): Promise<RedisClient>;
   public abstract get id(): string;
   public abstract get name(): string;
+  public abstract get keyPrefix(): string;
   public abstract get token(): string;
 
   public abstract set onGlobalJobCompletion(
@@ -82,7 +85,18 @@ export abstract class Queue {
   public abstract isPaused(): Promise<boolean>;
 
   public abstract getJob(id: JobId): Promise<Maybe<Job>>;
-  public abstract jobFromJSON(json: any, jobId: JobId): Job;
+  /**
+   * Builds a Job from its raw redis hash.
+   *
+   * @param knownStatus the status list the job was scanned from. Passing it lets
+   * the job report its state without another redis round-trip, and keeps the
+   * job usable even when the underlying client cannot rehydrate it.
+   */
+  public abstract jobFromJSON(
+    json: any,
+    jobId: JobId,
+    knownStatus?: JobStatus
+  ): Job;
   public abstract getJobs(
     types: JobStatus | JobStatus[],
     start?: number,

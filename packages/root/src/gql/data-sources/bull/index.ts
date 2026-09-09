@@ -1,4 +1,3 @@
-import { DataSource } from 'apollo-datasource';
 import { JsonService } from '../../../services/json';
 import { OrderEnum } from '../../../typings/gql';
 import redisInfo from 'redis-info';
@@ -30,14 +29,12 @@ import type { Maybe } from '../../../typings/utils';
 type Config = {
   textSearchScanCount?: number;
 };
-export class BullDataSource extends DataSource {
+export class BullDataSource {
   constructor(
     private _queues: Queue[],
     private _queuesMap: Map<string, Queue>,
     private _config: Config
-  ) {
-    super();
-  }
+  ) {}
 
   // queries
   public getQueueById(id: string, throwIfNotFound?: boolean) {
@@ -59,16 +56,22 @@ export class BullDataSource extends DataSource {
     ids,
     order = OrderEnum.Desc,
     dataSearch,
+    name,
   }: {
-    limit?: number;
-    offset?: number;
-    dataSearch?: string;
-    id?: string;
-    order?: OrderEnum;
-    ids?: string[];
-    status?: JobStatus;
+    limit?: Maybe<number> | null;
+    offset?: Maybe<number> | null;
+    dataSearch?: Maybe<string> | null;
+    name?: Maybe<string> | null;
+    id?: Maybe<string> | null;
+    order?: Maybe<OrderEnum> | null;
+    ids?: Maybe<Array<Maybe<string> | null>> | null;
+    status?: Maybe<JobStatus> | null;
     queue: string;
   }) {
+    limit = limit ?? 20;
+    offset = offset ?? 0;
+    order = order ?? OrderEnum.Desc;
+    const hasSearch = Boolean(dataSearch?.trim() || name?.trim());
     if (!isNil(offset) && offset < 0) {
       this._throwInternalError(ErrorEnum.BAD_OFFSET);
     }
@@ -77,35 +80,34 @@ export class BullDataSource extends DataSource {
     }
     const bullQueue = this.getQueueById(queue, true) as Queue;
     if (ids) {
-      return await Promise.all(ids.map((id) => bullQueue.getJob(id))).then(
+      const validIds = ids.filter((v): v is string => Boolean(v));
+      return await Promise.all(validIds.map((id) => bullQueue.getJob(id))).then(
         this._filterJobs
       );
     } else if (id) {
       const job = await bullQueue.getJob(id);
       return job ? [job] : [];
-    } else if (dataSearch) {
-      if (status) {
-        const searcher = new PowerSearch(bullQueue);
-        return await searcher
-          .search({
-            status,
-            search: dataSearch,
-            offset: offset,
-            limit: limit,
-            scanCount: this._config.textSearchScanCount,
-          })
-          .then(this._filterJobs);
-      } else {
+    } else if (hasSearch) {
+      if (!status) {
         this._throwInternalError(ErrorEnum.DATA_SEARCH_STATUS_REQUIRED);
       }
+      const searcher = new PowerSearch(bullQueue);
+      return await searcher
+        .search({
+          status: status as JobStatus,
+          search: dataSearch ?? undefined,
+          name: name ?? undefined,
+          offset,
+          limit,
+          scanCount: this._config.textSearchScanCount,
+        })
+        .then(this._filterJobs);
     } else if (status) {
       return await bullQueue
         .getJobs([status], offset, offset + limit - 1, order === OrderEnum.Asc)
         .then(this._filterJobs);
     }
-    {
-      return [];
-    }
+    return [];
   }
   public async getJob(queueId: string, id: JobId, throwIfNotFound?: boolean) {
     const queue = this.getQueueById(queueId, true)!;
@@ -267,16 +269,16 @@ export class BullDataSource extends DataSource {
     return job;
   }
 
-  private _filterJobs(jobs: Job[]) {
-    return jobs.filter(Boolean);
+  private _filterJobs(jobs: Array<Job | undefined>): Job[] {
+    return jobs.filter((job): job is Job => Boolean(job));
   }
-  private _throwInternalError(e: ErrorEnum) {
+  private _throwInternalError(e: ErrorEnum): never {
     throw new BullMonitorError(e);
   }
-  private _throwQueueNotFound() {
+  private _throwQueueNotFound(): never {
     this._throwInternalError(ErrorEnum.QUEUE_NOT_FOUND);
   }
-  private _throwJobNotFound() {
+  private _throwJobNotFound(): never {
     this._throwInternalError(ErrorEnum.JOB_NOT_FOUND);
   }
 }

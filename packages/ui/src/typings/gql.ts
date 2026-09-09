@@ -247,6 +247,7 @@ export type QueryJobsArgs = {
   id?: Maybe<Scalars['ID']>;
   ids?: Maybe<Array<Maybe<Scalars['ID']>>>;
   dataSearch?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -508,6 +509,7 @@ export type GetJobsForExportQueryVariables = Exact<{
   status?: Maybe<JobStatus>;
   id?: Maybe<Scalars['ID']>;
   dataSearch?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -524,6 +526,7 @@ export type GetJobsQueryVariables = Exact<{
   order?: Maybe<OrderEnum>;
   id?: Maybe<Scalars['ID']>;
   dataSearch?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   fetchData: Scalars['Boolean'];
 }>;
 

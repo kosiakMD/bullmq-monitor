@@ -8,15 +8,15 @@ type TState = {
   changePerPage: (perPage: number) => void;
 };
 
-export const usePaginationStore = createStore<TState>(
+export const usePaginationStore = createStore<TState>()(
   persist(
     (set) => ({
       perPage: PaginationConfig.perPageOptions[1],
       changePerPage: (perPage) => set({ perPage }),
     }),
     {
-      whitelist: ['perPage'],
       name: `${StorageConfig.persistNs}pagination`,
+      partialize: (state) => ({ perPage: state.perPage }) as TState,
     }
   )
 );

@@ -13,7 +13,7 @@ import { useAbstractMutation } from '@/hooks/use-abstract-mutation';
 import { useExportJobsMutation } from '@/hooks/use-export-jobs-mutation';
 import { activeStatusAtom } from '@/atoms/workspaces';
 import { activeQueueAtom } from '@/atoms/workspaces';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { useQueueData } from '@/hooks/use-queue-data';
 
 const useStyles = makeStyles((theme) => ({

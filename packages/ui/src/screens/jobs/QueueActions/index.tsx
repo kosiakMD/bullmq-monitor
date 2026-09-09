@@ -20,9 +20,10 @@ import {
   activeQueueAtom,
   activeStatusAtom,
   jobIdAtom,
+  jobNameAtom,
   dataSearchAtom,
 } from '@/atoms/workspaces';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import SaveIcon from '@mui/icons-material/Save';
 import Tooltip from '@mui/material/Tooltip';
 import { useExportJobsMutation } from '@/hooks/use-export-jobs-mutation';
@@ -73,6 +74,7 @@ const QueueActions = () => {
   const queue = useAtomValue(activeQueueAtom) as string;
   const status = useAtomValue(activeStatusAtom);
   const jobId = useAtomValue(jobIdAtom);
+  const jobName = useAtomValue(jobNameAtom);
   const dataSearch = useAtomValue(dataSearchAtom);
   const {
     mutations: { pauseQueue, resumeQueue, emptyQueue, cleanQueue },
@@ -164,7 +166,8 @@ const QueueActions = () => {
               queue,
               status,
               id: jobId,
-              dataSearch,
+              name: jobName || undefined,
+              dataSearch: dataSearch || undefined,
             });
           }}
         >

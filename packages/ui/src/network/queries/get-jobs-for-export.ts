@@ -16,6 +16,7 @@ export const getJobsForExport = (
         $status: JobStatus
         $id: ID
         $dataSearch: String
+        $name: String
       ) {
         jobs(
           queue: $queue
@@ -23,6 +24,7 @@ export const getJobsForExport = (
           status: $status
           id: $id
           dataSearch: $dataSearch
+          name: $name
           offset: 0
           limit: 100000
         ) {

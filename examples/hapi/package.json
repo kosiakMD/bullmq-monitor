@@ -1,23 +1,20 @@
 {
-  "name": "example-hapi",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@bullmq-monitor-examples/hapi",
+  "version": "0.0.0",
+  "private": true,
+  "description": "BullMQ Monitor mounted in a Hapi app",
   "scripts": {
-    "start": "ts-node-dev -r tsconfig-paths/register index.ts",
-    "with-basic-auth": "ts-node-dev -r tsconfig-paths/register with-basic-auth.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/hapi__basic": "^5.1.2",
-    "@types/hapi__hapi": "^20.0.7",
-    "ts-node-dev": "^1.1.6",
-    "tsconfig-paths": "^3.9.0"
+    "start": "tsx index.ts"
   },
   "dependencies": {
-    "@hapi/basic": "^6.0.0",
-    "@hapi/hapi": "^20.1.2"
+    "@bullmq-monitor-examples/shared": "*",
+    "@bullmq-monitor/hapi": "*",
+    "@bullmq-monitor/root": "*",
+    "@hapi/hapi": "^21.3.12",
+    "bullmq": "^6.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
   }
 }

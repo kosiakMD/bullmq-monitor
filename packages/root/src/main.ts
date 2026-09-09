@@ -1,3 +1,8 @@
+import { ApolloServer, ApolloServerPlugin, BaseContext } from '@apollo/server';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import type { Server as HttpServer } from 'http';
+import type { Server as HttpsServer } from 'https';
 import {
   BullDataSource,
   MetricsDataSource,
@@ -5,17 +10,35 @@ import {
 } from './gql/data-sources';
 import { typeDefs } from './gql/type-defs';
 import { resolvers } from './gql/resolvers';
+import type { TContext } from './gql/resolvers/typings';
 import { UI } from './ui';
 import { MetricsCollector } from './metrics-collector';
 import { Queue } from './queue';
-import { DEFAULT_METRICS_CONFIG, DEFAULT_ROOT_CONFIG } from './constants';
+import {
+  DEFAULT_METRICS_CONFIG,
+  DEFAULT_ROOT_CONFIG,
+  GQL_PATH,
+  UI_ASSETS_PATH,
+} from './constants';
+import { toHeaderMap } from './http';
 import type {
-  ApolloServerBase,
-  Config as ApolloConfig,
-} from 'apollo-server-core';
-import type { Config, MetricsConfig } from './typings/config';
+  Config,
+  MetricsConfig,
+  HttpGraphQLRequest,
+  HttpGraphQLResponse,
+  UiAsset,
+} from './typings/config';
 
-export abstract class BullMonitor<TServer extends ApolloServerBase> {
+export type ServerPlugins = ApolloServerPlugin<BaseContext>[];
+
+/**
+ * Framework-agnostic core. Adapters (express, koa, hapi, fastify, nest)
+ * extend it and wire three routes:
+ *   GET  <base>/            -> renderUi(base)
+ *   GET  <base>/ui/:file    -> getUiAsset(file)
+ *   GET|POST <base>/graphql -> handleGraphQLRequest(...)
+ */
+export abstract class BullMonitor {
   private _queues: Queue[] = [];
   private _queuesMap: Map<string, Queue> = new Map();
   private _ui: UI;
@@ -23,7 +46,7 @@ export abstract class BullMonitor<TServer extends ApolloServerBase> {
 
   constructor(config: Config) {
     this.config = this._normalizeConfig(config);
-    this._ui = new UI();
+    this._ui = new UI(this.config.ui);
     this._initQueues(this.config.queues);
     if (this.config.metrics) {
       this._initMetricsCollector();
@@ -45,56 +68,116 @@ export abstract class BullMonitor<TServer extends ApolloServerBase> {
       this._metricsCollector.startCollecting();
     } else {
       console.warn(
-        'Metrics collector is not initialized. Please pass the metrics config while initializing bull-monitor: { metrics: { collectInterval: { hours: 1 } } }'
+        '[bullmq-monitor] Metrics collector is not initialized. Pass the metrics config while initializing the monitor: { metrics: { collectInterval: { hours: 1 } } }'
       );
     }
   }
   public stopMetricsCollector() {
     this._metricsCollector?.stopCollecting();
   }
+  /** stops the GraphQL server and the metrics collector */
+  public async close(): Promise<void> {
+    this.stopMetricsCollector();
+    if (this.server) {
+      await this.server.stop();
+    }
+  }
 
-  protected gqlBasePath = '/graphql';
+  protected gqlBasePath = `/${GQL_PATH}`;
+  protected uiAssetsBasePath = `/${UI_ASSETS_PATH}`;
   protected config: Required<Config>;
-  protected server: TServer;
-  protected createServer(
-    Server: new (config: ApolloConfig) => TServer,
-    plugins?: ApolloConfig['plugins']
-  ) {
-    this.server = new Server({
-      persistedQueries: false,
+  protected server!: ApolloServer<BaseContext>;
+
+  protected createServer(plugins: ServerPlugins = []) {
+    this.server = new ApolloServer<BaseContext>({
       typeDefs,
       resolvers,
-      plugins,
+      plugins: [
+        ...plugins,
+        ...(this.config.gqlIntrospection
+          ? []
+          : [ApolloServerPluginLandingPageDisabled()]),
+      ],
       introspection: this.config.gqlIntrospection,
-      dataSources: () => ({
+      // CSRF prevention requires a preflight-triggering header on GET requests.
+      // The dashboard always sends application/json so it stays safe, but some
+      // reverse proxies rewrite content types, so we keep the check lenient.
+      csrfPrevention: false,
+    });
+  }
+  /** shortcut for adapters that have access to the node http server */
+  protected drainPlugin(httpServer?: HttpServer | HttpsServer): ServerPlugins {
+    return httpServer
+      ? [ApolloServerPluginDrainHttpServer({ httpServer })]
+      : [];
+  }
+  protected async startServer() {
+    if (!this.server) {
+      this.createServer();
+    }
+    await this.server.start();
+  }
+  /** Handles a GraphQL http request. `body` must be already parsed for POST requests. */
+  protected async handleGraphQLRequest(
+    req: HttpGraphQLRequest
+  ): Promise<HttpGraphQLResponse> {
+    const result = await this.server.executeHTTPGraphQLRequest({
+      httpGraphQLRequest: {
+        method: req.method.toUpperCase(),
+        headers: toHeaderMap(req.headers),
+        search: req.search || '',
+        body: req.body,
+      },
+      context: async () => this.createContext(),
+    });
+    let body = '';
+    if (result.body.kind === 'complete') {
+      body = result.body.string;
+    } else {
+      for await (const chunk of result.body.asyncIterator) {
+        body += chunk;
+      }
+    }
+    const headers: Record<string, string> = {};
+    for (const [key, value] of result.headers) {
+      headers[key] = value;
+    }
+    return { status: result.status ?? 200, headers, body };
+  }
+  protected createContext(): TContext {
+    return {
+      dataSources: {
         bull: new BullDataSource(this._queues, this._queuesMap, {
           textSearchScanCount: this.config.textSearchScanCount,
         }),
         metrics: new MetricsDataSource(this._metricsCollector),
         policies: new PoliciesDataSource(this._queuesMap),
-      }),
-    });
+      },
+    };
   }
-  protected async startServer() {
-    return await this.server.start();
+  /** @param basePath path the dashboard is mounted at (e.g. req.baseUrl in express) */
+  protected renderUi(basePath?: string): string {
+    if (!this._ui.assetsAvailable) {
+      console.warn(
+        '[bullmq-monitor] UI assets are missing. The package seems to be built without the dashboard (run "npm run build" in the monorepo).'
+      );
+    }
+    return this._ui.render(basePath ?? this.baseUrl);
   }
-  protected renderUi() {
-    return this._ui.render();
+  protected getUiAsset(fileName: string): UiAsset | undefined {
+    return this._ui.getAsset(fileName);
   }
   protected get baseUrl() {
-    return this.config.baseUrl;
+    return UI.normalizeBase(this.config.baseUrl);
   }
   protected get uiEndpoint() {
     return this.baseUrl || '/';
   }
   protected get gqlEndpoint() {
-    const base = this.baseUrl;
-    if (!base) {
-      return this.gqlBasePath;
-    } else if (base.endsWith('/')) {
-      return base.slice(0, -1) + this.gqlBasePath;
-    }
-    return base + this.gqlBasePath;
+    return this.baseUrl + this.gqlBasePath;
+  }
+  protected get uiAssetsEndpoint() {
+    return this.baseUrl + this.uiAssetsBasePath;
   }
 
   private _initQueues(rawQueues: Config['queues']) {
@@ -115,7 +198,7 @@ export abstract class BullMonitor<TServer extends ApolloServerBase> {
     });
     if (hasInvalid) {
       console.error(
-        'Since version 3.0.0 every queue should be wrapped in bull or bullmq adapter. Check out the bull-monitor docs for more info - https://github.com/s-r-x/bull-monitor'
+        '[bullmq-monitor] Every queue should be wrapped in BullMQAdapter or BullAdapter. See https://github.com/kosiakMD/bullmq-monitor'
       );
     }
     return validated;

@@ -1,37 +1,38 @@
 {
-  "name": "@bull-monitor/koa",
-  "version": "5.4.0",
-  "description": "bull-monitor for koa",
+  "name": "@bullmq-monitor/koa",
+  "version": "6.0.0",
+  "description": "Koa adapter for BullMQ Monitor - a dashboard for BullMQ and Bull queues",
+  "keywords": ["bullmq", "bull", "koa", "queue", "dashboard", "monitor"],
+  "author": "Anton Kosiak (https://github.com/kosiakMD)",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s-r-x/bull-monitor.git",
+    "url": "https://github.com/kosiakMD/bullmq-monitor.git",
     "directory": "packages/koa"
   },
-  "keywords": [
-    "bull"
-  ],
-  "author": "Ilya Strus <strax1990@gmail.com>",
-  "license": "MIT",
-  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/kosiakMD/bullmq-monitor/tree/main/packages/koa#readme",
+  "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "engines": { "node": ">=20" },
+  "publishConfig": { "access": "public", "provenance": true },
   "scripts": {
-    "build": "npm run clean && npm run compile",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "clean": "rm -rf ./dist",
-    "compile": "tsc -p tsconfig.json",
-    "dev": "tsc --watch"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
-    "@bull-monitor/root": "^5.4.0",
-    "apollo-server-koa": "^3.6.3"
+    "@bullmq-monitor/root": "^6.0.0",
+    "@koa/router": "^13.0.0 || ^14.0.0 || ^15.0.0"
   },
   "peerDependencies": {
-    "koa": "2.x",
-    "koa-router": "7.x || 8.x || 9.x || 10.x"
+    "koa": "^2.15.0 || ^3.0.0"
   },
   "devDependencies": {
-    "@types/koa": "^2.13.1",
-    "@types/koa-router": "^7.4.2",
-    "typescript": "^4.2.4"
-  },
-  "gitHead": "56060c20da8134cce74efaf278dd63b81cdcab4f"
+    "@types/koa": "^2.15.0",
+    "koa": "^2.15.3",
+    "typescript": "^5.9.0"
+  }
 }

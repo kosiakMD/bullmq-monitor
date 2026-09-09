@@ -1,34 +1,59 @@
 {
-  "name": "@bull-monitor/entrypoint",
-  "version": "0.1.0",
-  "description": "",
+  "name": "bullmq-monitor-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "BullMQ Monitor - a self-hosted dashboard for BullMQ and Bull queues (monorepo)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s-r-x/bull-monitor.git"
+    "url": "https://github.com/kosiakMD/bullmq-monitor.git"
   },
-  "homepage": "https://s-r-x.github.io/bull-monitor",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
+  "homepage": "https://kosiakmd.github.io/bullmq-monitor",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
   "scripts": {
-    "predeploy": "make ui.build-demo",
-    "deploy": "gh-pages -d packages/ui/build"
+    "build": "npm run build:ui && lerna run build --ignore @bullmq-monitor/ui",
+    "build:ui": "npm run build -w packages/ui",
+    "build:demo": "npm run build-demo -w packages/ui",
+    "typecheck": "tsc -p tsconfig.json && npm run typecheck -w packages/ui",
+    "lint": "eslint \"packages/*/src/**/*.ts\" \"examples/**/*.ts\"",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,tsx}\" \"examples/**/*.ts\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev:ui": "npm run dev -w packages/ui",
+    "dev:ui:mocks": "npm run dev-with-mocks -w packages/ui",
+    "example:express": "npm start -w examples/express",
+    "example:express-basic-auth": "npm run with-basic-auth -w examples/express",
+    "example:express4": "npm run express4 -w examples/express",
+    "example:nest": "npm run start:dev -w examples/nest",
+    "example:koa": "npm start -w examples/koa",
+    "example:hapi": "npm start -w examples/hapi",
+    "example:fastify": "npm start -w examples/fastify",
+    "version": "lerna version --no-push",
+    "publish:packages": "lerna publish from-package --yes",
+    "deploy:demo": "npm run build:demo && gh-pages -d packages/ui/build",
+    "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.22",
-    "@typescript-eslint/eslint-plugin": "^4.31.0",
-    "@typescript-eslint/parser": "^4.31.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "gh-pages": "^3.2.3",
-    "jest": "^26.6.3",
-    "lerna": "^4.0.0",
-    "prettier": "^2.4.0",
-    "ts-jest": "^26.5.4",
-    "ts-node": "^9.1.1",
-    "ts-node-dev": "^1.1.6",
-    "typescript": "^4.2.3"
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "gh-pages": "^6.1.1",
+    "jest": "^30.0.0",
+    "lerna": "^8.1.0",
+    "prettier": "^3.3.0",
+    "ts-jest": "^29.4.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
   }
 }

@@ -1,25 +1,33 @@
 import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react-refresh';
+import react from '@vitejs/plugin-react';
 import { ALIASES, DST } from './vite.config.constants';
 
 export default defineConfig({
-  plugins: [reactRefresh()],
+  plugins: [react()],
+  define: {
+    global: 'globalThis',
+  },
   build: {
-    target: 'es2015',
+    target: 'es2020',
     outDir: DST,
+    emptyOutDir: true,
     minify: true,
     cssCodeSplit: false,
-    brotliSize: false,
+    reportCompressedSize: false,
     chunkSizeWarningLimit: 100000,
     rollupOptions: {
       output: {
         assetFileNames: 'style.css',
-        manualChunks: {},
+        manualChunks: undefined,
         entryFileNames: 'main.js',
+        chunkFileNames: 'main.js',
       },
     },
   },
   resolve: {
     alias: ALIASES,
+  },
+  server: {
+    port: 8080,
   },
 });

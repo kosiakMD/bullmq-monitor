@@ -1,48 +1,62 @@
-# @bull-monitor/express
+# @bullmq-monitor/express
 
-[Express](https://github.com/expressjs/express) adapter for [bull-monitor](https://github.com/s-r-x/bull-monitor)
+Express adapter for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
+Supports Express 4 and Express 5.
+
+```bash
+npm i @bullmq-monitor/express
+```
 
 ## Usage
 
-```sh
-npm i @bull-monitor/express
-```
-
-```typescript
-import { BullMonitorExpress } from '@bull-monitor/express';
-import { BullAdapter } from '@bull-monitor/root/dist/bull-adapter';
-// for BullMQ users
-// import { BullMQAdapter } from "@bull-monitor/root/dist/bullmq-adapter";
+```ts
 import Express from 'express';
-import Queue from 'bull';
+import { Queue } from 'bullmq';
+import { BullMonitorExpress } from '@bullmq-monitor/express';
+import { BullMQAdapter } from '@bullmq-monitor/root';
 
-(async () => {
-  const app = Express();
-  const monitor = new BullMonitorExpress({
-    queues: [
-      new BullAdapter(new Queue('1', 'REDIS_URI')),
-      // readonly queue
-      new BullAdapter(new Queue('2', 'REDIS_URI'), { readonly: true }),
-    ],
-    // enables graphql introspection query. false by default if NODE_ENV == production, true otherwise
-    gqlIntrospection: true,
-    // enable metrics collector. false by default
-    // metrics are persisted into redis as a list
-    // with keys in format "bull_monitor::metrics::{{queue}}"
-    metrics: {
-      // collect metrics every X
-      // where X is any value supported by https://github.com/kibertoad/toad-scheduler
-      collectInterval: { hours: 1 },
-      maxMetrics: 100,
-      // disable metrics for specific queues
-      blacklist: ['1'],
-    },
-  });
-  await monitor.init();
-  app.use('/my/url', monitor.router);
-  app.listen(3000);
+const queue = new Queue('emails', { connection: { host: 'localhost', port: 6379 } });
 
-  // replace queues
-  monitor.setQueues([new BullAdapter(new Queue('3', 'REDIS_URI'))]);
-})();
+const app = Express();
+const server = app.listen(3000);
+
+const monitor = new BullMonitorExpress({
+  queues: [new BullMQAdapter(queue)],
+});
+
+// pass httpServer to drain in-flight GraphQL requests on shutdown
+await monitor.init({ httpServer: server });
+app.use('/admin/queues', monitor.router);
 ```
+
+The dashboard is served at the path you mount the router on. Nothing else needs
+configuring: the mount path is read from the request, so the same monitor works
+behind a prefix, a subdomain or a proxy.
+
+## Options
+
+```ts
+await monitor.init({
+  httpServer,        // optional, enables graceful drain
+  bodyParsed: true,  // set when a global express.json() already parsed the body
+});
+```
+
+`bodyParsed` is detected automatically, so you only need it when a middleware
+parses the body into something unusual.
+
+## Behind basic auth
+
+```ts
+app.use('/admin/queues', basicAuth({ challenge: true, users: { admin: 'pass' } }), monitor.router);
+```
+
+## Shutdown
+
+```ts
+await monitor.close();
+```
+
+## License
+
+MIT

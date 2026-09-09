@@ -5,6 +5,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import type { Theme } from '@mui/material/styles';
 import { useDrawerState } from '@/stores/drawer';
 import shallow from 'zustand/shallow';
 import NetworkRequest from '@/components/NetworkRequest';
@@ -22,40 +24,42 @@ import isempty from 'lodash/isEmpty';
 import Alert from '@mui/material/Alert';
 import { LayoutConfig } from '@/config/layouts';
 
-const useStyles = makeStyles((theme) => ({
-  drawer: {
-    width: 'auto',
-    position: 'relative',
-    [theme.breakpoints.up('md')]: {
-      width: 'var(--drawer-width)',
-      flexShrink: 0,
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawer: {
+      width: 'auto',
+      position: 'relative',
+      [theme.breakpoints.up('md')]: {
+        width: 'var(--drawer-width)',
+        flexShrink: 0,
+      },
     },
-  },
-  toolbar: {
-    ...theme.mixins.toolbar,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  utils: {
-    display: 'flex',
-    marginTop: theme.spacing(1),
-    marginLeft: theme.spacing(0.5),
-    marginRight: theme.spacing(0.5),
-    alignItems: 'center',
-  },
-  filter: {
-    flex: 1,
-  },
-  dragger: {
-    width: 4,
-    cursor: 'ew-resize',
-    position: 'absolute',
-    top: 0,
-    right: -4,
-    bottom: 0,
-    zIndex: 1201,
-  },
-}));
+    toolbar: {
+      ...(theme.mixins.toolbar as Record<string, unknown>),
+      display: 'flex',
+      alignItems: 'center',
+    },
+    utils: {
+      display: 'flex',
+      marginTop: theme.spacing(1),
+      marginLeft: theme.spacing(0.5),
+      marginRight: theme.spacing(0.5),
+      alignItems: 'center',
+    },
+    filter: {
+      flex: 1,
+    },
+    dragger: {
+      width: 4,
+      cursor: 'ew-resize',
+      position: 'absolute',
+      top: 0,
+      right: -4,
+      bottom: 0,
+      zIndex: 1201,
+    },
+  })
+);
 
 export default function Drawer() {
   const { data, status, refetch, error } = useQueuesQuery();

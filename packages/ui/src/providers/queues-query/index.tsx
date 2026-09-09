@@ -8,7 +8,7 @@ import { getPollingInterval } from '@/stores/network-settings';
 
 type TValue = UseQueryResult<GetQueuesQuery, unknown>;
 export const QueuesQueryContext = React.createContext<TValue>(null as any);
-export const QueuesQueryProvider: React.FC = (props) => {
+export const QueuesQueryProvider: React.FC<{ children?: React.ReactNode }> = (props) => {
   const { queries } = useNetwork();
   const refetchInterval = getPollingInterval();
   const value = useQuery(QueryKeysConfig.queues, queries.getQueues, {

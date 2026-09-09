@@ -8,13 +8,14 @@ import {
   useNetworkSettingsStore,
 } from '@/stores/network-settings';
 import { useRefetchJobsLockStore } from '@/stores/refetch-jobs-lock';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import {
   activePageAtom,
   activeQueueAtom,
   activeStatusAtom,
   dataSearchAtom,
   jobIdAtom,
+  jobNameAtom,
   jobsOrderAtom,
 } from '@/atoms/workspaces';
 
@@ -28,6 +29,7 @@ export const useJobsQuery = () => {
   const queue = useAtomValue(activeQueueAtom) as string;
   const order = useAtomValue(jobsOrderAtom);
   const jobId = useAtomValue(jobIdAtom);
+  const jobName = useAtomValue(jobNameAtom);
   const dataSearch = useAtomValue(dataSearchAtom);
   const isFetchLocked = useRefetchJobsLockStore((state) => state.isLocked);
   const [shouldFetchData, textSearchPollingDisabled] = useNetworkSettingsStore(
@@ -45,6 +47,7 @@ export const useJobsQuery = () => {
         status,
         order,
         id: jobId,
+        name: jobName,
         dataSearch,
         shouldFetchData,
       },
@@ -57,14 +60,15 @@ export const useJobsQuery = () => {
         status,
         order,
         id: jobId,
+        name: jobName || undefined,
         fetchData: shouldFetchData,
-        dataSearch: dataSearch,
+        dataSearch: dataSearch || undefined,
       }),
     {
       keepPreviousData: true,
       enabled: Boolean(queue),
       refetchInterval:
-        isFetchLocked || (textSearchPollingDisabled && dataSearch)
+        isFetchLocked || (textSearchPollingDisabled && (dataSearch || jobName))
           ? false
           : refetchInterval,
     }

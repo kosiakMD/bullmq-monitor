@@ -12,7 +12,7 @@ type TState = {
   changeKeyMap: (keyMap: string) => void;
 };
 
-export const useCodeEditorStore = createStore<TState>(
+export const useCodeEditorStore = createStore<TState>()(
   persist(
     (set) => ({
       keyMap: 'default',

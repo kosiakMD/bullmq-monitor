@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import makeStyles from '@mui/styles/makeStyles';
 import AddIcon from '@mui/icons-material/Add';
-import { useAtomValue, useUpdateAtom } from 'jotai/utils';
+import { useAtomValue, useSetAtom } from 'jotai';
 import {
   activeWorkspaceIdAtom,
   addWorkspaceAtom,
@@ -46,10 +46,10 @@ export default function WorkspacePicker() {
     activeWorkspaceIdAtom
   );
   const workspacesSize = useAtomValue(workspacesSizeAtom);
-  const addWorkspace = useUpdateAtom(addWorkspaceAtom);
+  const addWorkspace = useSetAtom(addWorkspaceAtom);
   const queue = useAtomValue(activeQueueAtom) as string;
   const queueLabel = useAtomValue(activeQueueLabelAtom) as string;
-  const removeWorkspace = useUpdateAtom(removeWorkspaceAtom);
+  const removeWorkspace = useSetAtom(removeWorkspaceAtom);
   const cls = useStyles();
   return (
     <Paper className={cls.root}>

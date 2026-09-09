@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-core';
-
-export const redisInfoTypeDef = gql`
+export const redisInfoTypeDef = /* GraphQL */ `
   type RedisInfo {
     redis_version: String
     used_memory: String

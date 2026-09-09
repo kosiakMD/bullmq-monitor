@@ -1,22 +1,20 @@
-import { BullMonitorHapi } from '@bull-monitor/hapi';
 import Hapi from '@hapi/hapi';
+import { BullMonitorHapi } from '@bullmq-monitor/hapi';
+import { BullMQAdapter } from '@bullmq-monitor/root';
+import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
-const port = 3000;
-const baseUrl = '/some/nested/url';
+const PORT = Number(process.env.PORT || 3005);
+const BASE_URL = '/admin/queues';
+
 (async () => {
-  const server = Hapi.server({
-    port: 3000,
-    host: 'localhost',
-    routes: {
-      cors: true,
-    },
-  });
+  const { queues } = await seedQueues(['emails']);
+  const server = Hapi.server({ port: PORT, host: 'localhost' });
   const monitor = new BullMonitorHapi({
-    queues: [],
-    baseUrl,
+    queues: queues.map((q) => new BullMQAdapter(q)),
+    baseUrl: BASE_URL,
   });
-  await monitor.init({ hapiServer: server });
+  await monitor.init();
   await server.register(monitor.plugin);
   await server.start();
-  console.log(`http://localhost:${port}${baseUrl}`);
+  console.log(`Dashboard: http://localhost:${PORT}${BASE_URL}`);
 })();

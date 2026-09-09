@@ -1,5 +1,6 @@
 import type {
   QueryJobArgs,
+  QueryJobsArgs,
   QueryMetricsArgs,
   QueryQueueArgs,
 } from '../../typings/gql';
@@ -23,7 +24,7 @@ export const queryResolver: TResolvers = {
     queue(_, args: QueryQueueArgs, { dataSources: { bull } }) {
       return bull.getQueueById(args.id);
     },
-    async jobs(_, args, { dataSources: { bull } }) {
+    async jobs(_, args: QueryJobsArgs, { dataSources: { bull } }) {
       return await bull.getQueueJobs(args);
     },
     async job(_parent, { queue, id }: QueryJobArgs, { dataSources: { bull } }) {

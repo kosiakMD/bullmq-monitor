@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { ShareConfig } from '@/config/share';
 import { Base64 } from '@/services/base64';
-import { useUpdateAtom } from 'jotai/utils';
+import { useSetAtom } from 'jotai';
 import { addWorkspaceAtom } from '@/atoms/workspaces';
 import isObject from 'lodash/isObject';
 
 const token = ShareConfig.shareToken;
-const WorkspaceShareGate: React.FC = (props) => {
+const WorkspaceShareGate: React.FC<{ children?: React.ReactNode }> = (
+  props
+) => {
   const [hydrated, setHydrated] = useState(!token);
-  const addWorkspace = useUpdateAtom(addWorkspaceAtom);
+  const addWorkspace = useSetAtom(addWorkspaceAtom);
   useEffect(() => {
     if (!hydrated) {
       if (typeof token === 'string') {

@@ -1,36 +1,37 @@
 {
-  "name": "@bull-monitor/express",
-  "version": "5.4.0",
-  "description": "bull-monitor for express",
-  "keywords": [
-    "bull"
-  ],
-  "author": "Ilya Strus <strax1990@gmail.com>",
+  "name": "@bullmq-monitor/express",
+  "version": "6.0.0",
+  "description": "Express adapter for BullMQ Monitor - a dashboard for BullMQ and Bull queues",
+  "keywords": ["bullmq", "bull", "express", "queue", "dashboard", "monitor"],
+  "author": "Anton Kosiak (https://github.com/kosiakMD)",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s-r-x/bull-monitor.git",
+    "url": "https://github.com/kosiakMD/bullmq-monitor.git",
     "directory": "packages/express"
   },
-  "license": "MIT",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "npm run clean && npm run compile",
-    "clean": "rm -rf ./dist",
-    "compile": "tsc",
-    "dev": "tsc --watch"
-  },
+  "homepage": "https://github.com/kosiakMD/bullmq-monitor/tree/main/packages/express#readme",
+  "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "engines": { "node": ">=20" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "clean": "rm -rf ./dist",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsc -p tsconfig.json --watch"
+  },
   "dependencies": {
-    "@bull-monitor/root": "^5.4.0",
-    "apollo-server-express": "^3.6.3"
+    "@bullmq-monitor/root": "^6.0.0"
   },
   "peerDependencies": {
-    "express": "4.x"
+    "express": "^4.17.0 || ^5.0.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.11",
-    "express": "^4.17.1",
-    "typescript": "^4.2.4"
-  },
-  "gitHead": "56060c20da8134cce74efaf278dd63b81cdcab4f"
+    "@types/express": "^5.0.0",
+    "express": "^5.1.0",
+    "typescript": "^5.9.0"
+  }
 }

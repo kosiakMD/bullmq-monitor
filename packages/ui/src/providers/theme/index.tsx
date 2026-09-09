@@ -3,7 +3,7 @@ import { getMuiTheme } from '@/stores/theme';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { StyledEngineProvider } from '@mui/styled-engine';
 
-export const ThemeProvider: React.FC = (props) => {
+export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = (props) => {
   const muiTheme = getMuiTheme();
   return (
     <StyledEngineProvider injectFirst>

@@ -23,10 +23,13 @@ export class MetricsCollector {
   private _processingTimeGauge: Map<string, number[]> = new Map();
   private _queues: Queue[];
   private _scheduler: Scheduler;
-  private _schedulerJob: SchedulerJob;
+  private _schedulerJob!: SchedulerJob;
   private _isActive = false;
 
-  constructor(queues: Queue[], private _config: Required<MetricsConfig>) {
+  constructor(
+    queues: Queue[],
+    private _config: Required<MetricsConfig>
+  ) {
     this._scheduler = new Scheduler();
     this._queues = queues.filter((q) => !_config.blacklist.includes(q.name));
   }

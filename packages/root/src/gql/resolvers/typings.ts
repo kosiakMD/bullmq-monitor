@@ -1,15 +1,23 @@
-import type { IResolvers } from '@graphql-tools/utils';
 import type {
   BullDataSource,
   MetricsDataSource,
   PoliciesDataSource,
 } from '../data-sources';
 
-type DataSources = {
+export type TContext = {
   dataSources: {
     bull: BullDataSource;
     metrics: MetricsDataSource;
     policies: PoliciesDataSource;
   };
 };
-export type TResolvers = IResolvers<any, DataSources>;
+type TResolverFn = (
+  parent: any,
+  args: any,
+  context: TContext,
+  info?: any
+) => any;
+export type TResolvers = Record<
+  string,
+  Record<string, TResolverFn | any> | any
+>;

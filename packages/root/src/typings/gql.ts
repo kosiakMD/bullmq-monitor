@@ -247,6 +247,7 @@ export type QueryJobsArgs = {
   id?: Maybe<Scalars['ID']>;
   ids?: Maybe<Array<Maybe<Scalars['ID']>>>;
   dataSearch?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import CloseableTip from '@/components/CloseableTip';
+import { LinksConfig } from '@/config/links';
 
 type TProps = {
   className?: string;
@@ -7,24 +8,22 @@ type TProps = {
 const DataSearchTip = ({ className }: TProps) => {
   const text = (
     <>
-      Search is powered by{' '}
-      <a target="__blank" href="https://docs.jsonata.org/overview.html">
+      <b>Job name</b> matches a case-insensitive substring, or a wildcard
+      pattern like <code>send-*</code>. <b>Search in job data</b> is powered by{' '}
+      <a target="_blank" rel="noreferrer" href="https://docs.jsonata.org/overview.html">
         jsonata
       </a>
-      . Check out the{' '}
-      <a
-        target="__blank"
-        href="https://github.com/s-r-x/bull-monitor/blob/main/search-examples.md"
-      >
+      , see the{' '}
+      <a target="_blank" rel="noreferrer" href={LinksConfig.searchExamples}>
         examples
       </a>
-      .
+      . Both filters need a job status selected above.
     </>
   );
   return (
     <CloseableTip
       className={className}
-      persistKey="data-text-search-v3"
+      persistKey="jobs-filters-tip-v4"
       tip={text}
     />
   );

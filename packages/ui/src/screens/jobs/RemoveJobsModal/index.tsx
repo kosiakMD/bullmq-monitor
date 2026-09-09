@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRemoveJobsModalStore } from '@/stores/remove-jobs-modal';
 import { activeQueueAtom } from '@/atoms/workspaces';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 
 const useStyles = makeStyles((theme) => ({
   container: {

@@ -1,22 +1,27 @@
-import { BullMonitorExpress } from '@bull-monitor/express';
 import Express from 'express';
 import basicAuth from 'express-basic-auth';
+import { BullMonitorExpress } from '@bullmq-monitor/express';
+import { BullMQAdapter } from '@bullmq-monitor/root';
+import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
-const port = 3000;
-const baseUrl = '/some/nested/url';
+const PORT = Number(process.env.PORT || 3000);
+const BASE_URL = '/admin/queues';
+
 (async () => {
+  const { queues } = await seedQueues(['emails']);
+
   const app = Express();
-  const monitor = new BullMonitorExpress({ queues: [] });
+  const monitor = new BullMonitorExpress({
+    queues: queues.map((q) => new BullMQAdapter(q)),
+  });
   await monitor.init();
+
   app.use(
-    baseUrl,
-    basicAuth({
-      challenge: true,
-      users: {
-        admin: 'pass',
-      },
-    })
+    BASE_URL,
+    basicAuth({ challenge: true, users: { admin: 'pass' } }),
+    monitor.router
   );
-  app.use(baseUrl, monitor.router);
-  app.listen(port, () => console.log(`http://localhost:${port}${baseUrl}`));
+  app.listen(PORT, () =>
+    console.log(`Dashboard (admin/pass): http://localhost:${PORT}${BASE_URL}`)
+  );
 })();

@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import BackspaceIcon from '@mui/icons-material/Backspace';
 import { useDataSearchState } from './hooks';
 
@@ -16,19 +17,22 @@ const DataSearch = ({ className }: TProps) => {
       className={className}
       value={search}
       onChange={onChange}
-      label="Search"
+      label="Search in job data"
+      placeholder='e.g. data.userId = 42'
       variant="outlined"
       id="jobs-filters_data-search-key"
       autoComplete="off"
       size="small"
       InputProps={{
-        endAdornment: (
-          <Tooltip title="Clear">
-            <IconButton onClick={onClear} size="small">
-              <BackspaceIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        ),
+        endAdornment: search ? (
+          <InputAdornment position="end">
+            <Tooltip title="Clear search">
+              <IconButton onClick={onClear} size="small" edge="end">
+                <BackspaceIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </InputAdornment>
+        ) : undefined,
       }}
     />
   );

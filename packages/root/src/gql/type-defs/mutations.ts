@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-core';
-
-export const mutationsTypeDef = gql`
+export const mutationsTypeDef = /* GraphQL */ `
   scalar JSON
 
   input CreateJobInput {

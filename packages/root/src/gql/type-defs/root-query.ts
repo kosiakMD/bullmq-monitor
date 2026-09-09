@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-core';
-
-export const rootQueryTypeDef = gql`
+export const rootQueryTypeDef = /* GraphQL */ `
   type Query {
     queues: [Queue!]
     queue(id: ID!): Queue
@@ -14,6 +12,10 @@ export const rootQueryTypeDef = gql`
       id: ID
       ids: [ID]
       dataSearch: String
+      """
+      case-insensitive job name filter. Supports * wildcards, e.g. "send-*"
+      """
+      name: String
     ): [Job!]!
     job(queue: ID!, id: ID!): Job
     redisInfo: RedisInfo

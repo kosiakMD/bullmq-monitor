@@ -1,13 +1,4 @@
 node_modules
-**/node_modules
-packages/ui/src/typings/gql.ts
-packages/root/src/typings/gql.ts
-packages/ui/build
-packages/root/dist
-packages/hapi/dist
-packages/fastify/dist
-packages/ui/dist
-packages/cli/dist
-packages/express/dist
-fixtures/bull-server/server/index.js
-./docs
+dist
+build
+packages/root/ui

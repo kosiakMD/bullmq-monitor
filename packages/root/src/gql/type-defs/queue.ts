@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-core';
-
-export const queueTypeDef = gql`
+export const queueTypeDef = /* GraphQL */ `
   enum QueueProvider {
     bull
     bullmq

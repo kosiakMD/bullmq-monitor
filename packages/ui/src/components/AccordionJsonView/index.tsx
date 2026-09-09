@@ -11,7 +11,7 @@ type TProps = {
   textClassName?: string;
   defaultExpanded?: boolean;
 };
-const AccordionJsonView: React.FC<TProps> = (props) => {
+const AccordionJsonView: React.FC<React.PropsWithChildren<TProps>> = (props) => {
   const { children, header, textClassName, defaultExpanded = true } = props;
   return (
     <div>

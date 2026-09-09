@@ -13,7 +13,7 @@ import TableHead from './Head';
 import TableToolbar from './Toolbar';
 import { useSelectedJobsStore } from '@/stores/selected-jobs';
 import shallow from 'zustand/shallow';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { activeQueueAtom } from '@/atoms/workspaces';
 import { useQueueData } from '@/hooks/use-queue-data';
 
@@ -47,7 +47,7 @@ export default function Jobs() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Pagination />
+        <Pagination loadedRows={data?.jobs?.length ?? 0} />
       </NetworkRequest>
       <DataEditor />
       <JobLogsModal />

@@ -10,7 +10,7 @@ import {
   activeStatusAtom,
 } from '@/atoms/workspaces';
 import { useMaybeGroupQueuesByPrefix } from './hooks';
-import { useUpdateAtom } from 'jotai/utils';
+import { useSetAtom } from 'jotai';
 import type { GetQueuesQuery, JobStatus } from '@/typings/gql';
 import type { Maybe } from '@/typings/utils';
 
@@ -20,8 +20,8 @@ type TProps = {
 export default function DrawerQueuesList({ queues }: TProps) {
   const groupedQueues = useMaybeGroupQueuesByPrefix(queues);
   const [activeQueue, changeActiveQueue] = useAtom(activeQueueAtom);
-  const changeActiveQueueLabel = useUpdateAtom(activeQueueLabelAtom);
-  const changeActiveStatus = useUpdateAtom(activeStatusAtom);
+  const changeActiveQueueLabel = useSetAtom(activeQueueLabelAtom);
+  const changeActiveStatus = useSetAtom(activeStatusAtom);
   const closeDrawer = useDrawerState((state) => state.close);
   const onSelect = useCallback(
     (queue: string, label: string, status?: Maybe<JobStatus>) => {

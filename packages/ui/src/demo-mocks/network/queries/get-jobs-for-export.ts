@@ -3,6 +3,7 @@ import type {
   GetJobsForExportQueryVariables,
 } from '@/typings/gql';
 import { networkMockData } from '../data';
+import { matchesJobName } from '../match-name';
 
 export const getJobsForExportMock = (
   args: GetJobsForExportQueryVariables
@@ -11,7 +12,8 @@ export const getJobsForExportMock = (
     jobs: networkMockData.jobs.filter(
       (job) =>
         job.queue === args.queue &&
-        (args.ids ? args.ids?.includes(job.id) : true)
+        (args.ids ? args.ids?.includes(job.id) : true) &&
+        matchesJobName(job.name, args.name)
     ),
   });
 };

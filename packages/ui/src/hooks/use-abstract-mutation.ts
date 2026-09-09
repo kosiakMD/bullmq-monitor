@@ -9,7 +9,7 @@ import { usePreferencesStore } from '@/stores/preferences';
 
 export function useAbstractMutation<
   TData = unknown,
-  TVariables = unknown
+  TVariables = unknown,
 >(props: {
   confirm?: ConfirmOptions;
   mutation: MutationFunction<TData, TVariables>;
