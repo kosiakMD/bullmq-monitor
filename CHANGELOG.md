@@ -16,6 +16,10 @@ original packages.
   substring, `*` switches to wildcard matching. Combines with the jsonata data
   search, and both are part of the shareable workspace link.
 - **Clear filters.** One action resets the job id, name and data filters.
+- **Filter presets.** The host app ships saved searches through
+  `ui.filterPresets`. A preset sets the status, name and data search together;
+  a `{{value}}` placeholder makes the dashboard prompt for an id first, so one
+  preset covers lookups by organization, order or customer.
 - **Branding from the host app.** A new `ui` option sets the title, logo,
   favicon, extra top-bar links, date formats and colours without rebuilding the
   dashboard. `ui.theme.lock` hides the appearance controls.

@@ -9,6 +9,16 @@ export type TServerThemeConfig = {
   lock?: boolean;
 };
 
+export type TFilterPreset = {
+  label: string;
+  description?: string;
+  status?: string;
+  name?: string;
+  dataSearch?: string;
+  valueLabel?: string;
+  valuePlaceholder?: string;
+};
+
 export type TServerUiConfig = {
   title?: string;
   logo?: {
@@ -20,8 +30,18 @@ export type TServerUiConfig = {
   favicon?: { default: string; alternative?: string };
   links?: { text: string; url: string }[];
   dateFormats?: { short?: string; full?: string };
+  filterPresets?: TFilterPreset[];
   theme?: TServerThemeConfig;
 };
+
+/** placeholder a preset uses to ask the viewer for a value */
+export const PRESET_VALUE_TOKEN = '{{value}}';
+
+export const presetNeedsValue = (preset: TFilterPreset): boolean =>
+  `${preset.name ?? ''}${preset.dataSearch ?? ''}`.includes(PRESET_VALUE_TOKEN);
+
+export const fillPreset = (template: string | undefined, value: string) =>
+  template ? template.split(PRESET_VALUE_TOKEN).join(value) : '';
 
 /**
  * Branding the server asked for, rendered into
@@ -45,6 +65,10 @@ const read = (): TServerUiConfig => {
 
 export const ServerUiConfig: TServerUiConfig = read();
 export const ServerThemeConfig: TServerThemeConfig = ServerUiConfig.theme ?? {};
+export const FilterPresets: TFilterPreset[] = (
+  ServerUiConfig.filterPresets ?? []
+).filter((preset) => preset && typeof preset.label === 'string');
+
 export const DateFormatsConfig = {
   short: ServerUiConfig.dateFormats?.short || 'YYYY-MM-DD HH:mm:ss',
   full: ServerUiConfig.dateFormats?.full || 'YYYY-MM-DD HH:mm:ss',

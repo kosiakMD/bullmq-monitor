@@ -8,6 +8,7 @@ export type {
   UiFaviconConfig,
   UiLinkConfig,
   UiDateFormatsConfig,
+  UiFilterPreset,
   HttpGraphQLRequest,
   HttpGraphQLResponse,
   UiAsset,

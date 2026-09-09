@@ -64,6 +64,31 @@ export type UiDateFormatsConfig = {
   full?: string;
 };
 
+/**
+ * A saved job filter the host application ships with the dashboard.
+ *
+ * Presets exist because the useful searches are domain knowledge the dashboard
+ * cannot guess: "failed jobs for one organisation", "everything for an order".
+ * Put `{{value}}` anywhere in `name` or `dataSearch` and the dashboard asks for
+ * that value before applying the preset.
+ */
+export type UiFilterPreset = {
+  /** shown in the presets menu */
+  label: string;
+  /** optional one-line hint under the label */
+  description?: string;
+  /** job status to switch to, e.g. "failed" */
+  status?: string;
+  /** job name filter to apply. Supports "*" wildcards and `{{value}}` */
+  name?: string;
+  /** jsonata expression to apply. Supports `{{value}}` */
+  dataSearch?: string;
+  /** label of the input shown when the preset contains `{{value}}` */
+  valueLabel?: string;
+  /** placeholder of that input */
+  valuePlaceholder?: string;
+};
+
 /** Branding and chrome of the dashboard, all optional. */
 export type UiConfig = {
   /** page title and wordmark. default: "BullMQ Monitor" */
@@ -76,6 +101,8 @@ export type UiConfig = {
   links?: UiLinkConfig[];
   /** how timestamps are rendered */
   dateFormats?: UiDateFormatsConfig;
+  /** saved job filters offered in the jobs screen */
+  filterPresets?: UiFilterPreset[];
   /** colours */
   theme?: UiThemeConfig;
 };

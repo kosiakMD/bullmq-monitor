@@ -77,6 +77,21 @@ BullMonitorModule.forRoot({
 
 Serve the referenced files yourself, for example with `ServeStaticModule`.
 
+Saved searches work the same way:
+
+```ts
+ui: {
+  filterPresets: [
+    {
+      label: 'By organization',
+      status: 'failed',
+      dataSearch: 'data.organizationId = "{{value}}"',
+      valueLabel: 'Organization id',
+    },
+  ],
+}
+```
+
 ## Routes
 
 The module registers three explicit routes under `path`:

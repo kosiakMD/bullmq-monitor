@@ -178,11 +178,45 @@ new BullMonitorExpress({
 | `favicon` | `{ default, alternative? }`, rendered as `<link rel="icon">` |
 | `links` | Extra links in the top bar |
 | `dateFormats` | `{ short, full }` dayjs formats for the table and job details |
+| `filterPresets` | Saved searches offered in the jobs screen |
 | `theme` | `{ mode, primary, secondary, lock }` |
 
 Serve the referenced images yourself; the dashboard only points at the urls you
 give it. Without `theme.lock`, viewers can still switch light/dark and pick a
 palette from the settings dialog, and their choice is remembered per browser.
+
+## Filter presets
+
+The searches worth saving are domain knowledge the dashboard cannot guess.
+Ship them with it:
+
+```ts
+ui: {
+  filterPresets: [
+    {
+      label: 'Failed emails',
+      description: 'Everything that failed on the email queue',
+      status: 'failed',
+      name: 'send-*',
+    },
+    {
+      label: 'By organization',
+      status: 'completed',
+      dataSearch: 'data.organizationId = "{{value}}"',
+      valueLabel: 'Organization id',
+      valuePlaceholder: 'e.g. 42',
+    },
+  ],
+}
+```
+
+A preset appears in a **Presets** menu next to the filters. Selecting one applies
+its status, name and data search together. Put `{{value}}` anywhere in `name` or
+`dataSearch` and the dashboard asks for that value first, so one preset covers a
+whole family of lookups: by organization, by order, by customer.
+
+Fields a preset leaves out are cleared, so switching presets never leaves a
+stale filter behind.
 
 ## Read-only queues
 

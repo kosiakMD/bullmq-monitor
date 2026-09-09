@@ -27,6 +27,29 @@ const BASE_URL = '/admin/queues';
       favicon: { default: '/brand/favicon.svg' },
       links: [{ text: 'Back to admin', url: '/' }],
       dateFormats: { short: 'DD.MM HH:mm:ss', full: 'YYYY-MM-DD HH:mm:ss' },
+      // saved searches for the things this app actually cares about.
+      // "{{value}}" makes the dashboard ask for the id before applying.
+      filterPresets: [
+        {
+          label: 'Failed emails',
+          description: 'Everything that failed on the email queue',
+          status: 'failed',
+          name: 'send-*',
+        },
+        {
+          label: 'By order id',
+          description: 'Any job carrying this order id in its payload',
+          status: 'completed',
+          dataSearch: 'data.orderId = "{{value}}"',
+          valueLabel: 'Order id',
+          valuePlaceholder: 'e.g. 12345',
+        },
+        {
+          label: 'Report generation',
+          status: 'completed',
+          name: 'generate-*',
+        },
+      ],
       theme: { mode: 'dark', primary: '#0f62fe', secondary: '#ff7eb6' },
     },
   });

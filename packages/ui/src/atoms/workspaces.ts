@@ -150,6 +150,32 @@ export const clearAllFiltersAtom = atom(null, (_get, set) => {
   set(activeWorkspaceAtom, { jobId: '', jobName: '', dataSearch: '', page: 0 });
 });
 
+export type TFilterPresetDto = {
+  status?: string;
+  name?: string;
+  dataSearch?: string;
+};
+/**
+ * Applies a saved filter in one write, so the jobs query refetches once instead
+ * of once per field. Fields the preset leaves empty are cleared, so switching
+ * presets never leaves a stale filter behind.
+ */
+export const applyFilterPresetAtom = atom(
+  null,
+  (_get, set, preset: TFilterPresetDto) => {
+    const updates: TUpdateWorkspaceDto = {
+      jobId: '',
+      jobName: preset.name ?? '',
+      dataSearch: preset.dataSearch ?? '',
+      page: 0,
+    };
+    if (preset.status) {
+      updates.status = preset.status as JobStatus;
+    }
+    set(activeWorkspaceAtom, updates);
+  }
+);
+
 export const removeWorkspaceAtom = atom(null, (get, set, id: string) => {
   const list = get(workspacesListAtom);
   const activeId = get(activeWorkspaceIdAtom);

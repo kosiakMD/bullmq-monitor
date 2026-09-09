@@ -49,10 +49,15 @@ export async function seedQueues(
   );
 
   for (const queue of queues) {
-    for (const name of JOB_NAMES) {
-      await queue.add(name, { shouldFail: false, sample: name });
-      await queue.add(name, { shouldFail: true, sample: name });
-      await queue.add(`${name}-delayed`, { sample: name }, { delay: 60_000 });
+    for (const [idx, name] of JOB_NAMES.entries()) {
+      const orderId = `${1000 + idx}`;
+      await queue.add(name, { shouldFail: false, sample: name, orderId });
+      await queue.add(name, { shouldFail: true, sample: name, orderId });
+      await queue.add(
+        `${name}-delayed`,
+        { sample: name, orderId },
+        { delay: 60_000 }
+      );
     }
   }
 

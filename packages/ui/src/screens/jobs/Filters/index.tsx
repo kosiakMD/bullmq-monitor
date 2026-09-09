@@ -19,6 +19,7 @@ import {
 import DataSearch from './DataSearch';
 import DataSearchTip from './DataSearch/Tip';
 import JobNameFilter from './JobName';
+import FilterPresetsMenu from './Presets';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -124,6 +125,7 @@ export default function JobsFilters() {
           <MenuItem value={OrderEnum.Desc}>DESC</MenuItem>
           <MenuItem value={OrderEnum.Asc}>ASC</MenuItem>
         </TextField>
+        <FilterPresetsMenu className={cls.clearButton} />
         <JobNameFilter className={cls.nameField} />
         <DataSearch className={cls.dataSearchField} />
         {hasActiveFilters && (
