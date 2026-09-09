@@ -1,0 +1,79 @@
+name: Release
+
+# Publishes every package to npm and cuts a GitHub release.
+# Trigger it by pushing a tag, e.g. `git tag v6.0.0 && git push origin v6.0.0`,
+# or from the Actions tab.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Pack only, do not publish'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  # required for npm provenance
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify
+        run: |
+          npm run lint
+          npm run typecheck
+          npm test
+        env:
+          REDIS_URL: redis://127.0.0.1:6379
+
+      - name: Smoke test every adapter
+        run: npm run smoke
+        env:
+          REDIS_URL: redis://127.0.0.1:6379
+
+      - name: Pack
+        run: npx lerna exec --no-private -- npm pack --dry-run
+
+      - name: Publish to npm
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        run: npx lerna publish from-package --yes --no-private
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
+
+      - name: Create the GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body_path: CHANGELOG.md

@@ -2,9 +2,18 @@
   "name": "@bullmq-monitor/ui",
   "version": "6.0.0",
   "description": "Dashboard UI for BullMQ Monitor",
-  "keywords": ["bullmq", "bull", "queue", "dashboard", "monitor", "ui"],
+  "keywords": [
+    "bullmq",
+    "bull",
+    "queue",
+    "dashboard",
+    "monitor",
+    "ui"
+  ],
   "author": "Anton Kosiak (https://github.com/kosiakMD)",
-  "contributors": ["Ilya Strus <strax1990@gmail.com> (original bull-monitor author)"],
+  "contributors": [
+    "Ilya Strus <strax1990@gmail.com> (original bull-monitor author)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -13,9 +22,17 @@
   },
   "homepage": "https://github.com/kosiakMD/bullmq-monitor#readme",
   "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
-  "files": ["build", "README.md"],
-  "engines": { "node": ">=20" },
-  "publishConfig": { "access": "public", "provenance": true },
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite --open --port=8080",
     "dev-with-mocks": "VITE_ENABLE_MOCKS=true vite --open --port=8080",

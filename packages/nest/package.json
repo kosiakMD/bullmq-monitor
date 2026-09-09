@@ -2,7 +2,15 @@
   "name": "@bullmq-monitor/nest",
   "version": "6.0.0",
   "description": "NestJS module for BullMQ Monitor - a dashboard for BullMQ and Bull queues",
-  "keywords": ["bullmq", "bull", "nestjs", "nest", "queue", "dashboard", "monitor"],
+  "keywords": [
+    "bullmq",
+    "bull",
+    "nestjs",
+    "nest",
+    "queue",
+    "dashboard",
+    "monitor"
+  ],
   "author": "Anton Kosiak (https://github.com/kosiakMD)",
   "license": "MIT",
   "repository": {
@@ -14,9 +22,17 @@
   "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "README.md"],
-  "engines": { "node": ">=20" },
-  "publishConfig": { "access": "public", "provenance": true },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json",
     "clean": "rm -rf ./dist",

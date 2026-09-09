@@ -7,3 +7,4 @@ packages/root/ui
 coverage
 .env
 .env.local
+packages/*/LICENSE

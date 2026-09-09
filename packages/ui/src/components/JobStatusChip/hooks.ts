@@ -20,7 +20,7 @@ const LIGHT: Record<JobStatus, string> = {
   [JobStatus.Failed]: '#D92D20',
   [JobStatus.Delayed]: '#B26A00',
   [JobStatus.Prioritized]: '#AB0F3E',
-  [JobStatus.Paused]: '#6B6F8C',
+  [JobStatus.Paused]: '#64748B',
   [JobStatus.Stuck]: '#8A8FA6',
   [JobStatus.Unknown]: '#A9AEC0',
 };
@@ -32,7 +32,7 @@ const DARK: Record<JobStatus, string> = {
   [JobStatus.Failed]: '#FF6B6B',
   [JobStatus.Delayed]: '#FFB74D',
   [JobStatus.Prioritized]: '#FF7EB6',
-  [JobStatus.Paused]: '#949AB0',
+  [JobStatus.Paused]: '#94A3B8',
   [JobStatus.Stuck]: '#7A7F96',
   [JobStatus.Unknown]: '#5F6478',
 };

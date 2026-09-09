@@ -23,7 +23,7 @@ export type QueueConfig = {
 export type UiThemeColors = {
   /**
    * Primary colour. Either the name of a built-in Material palette
-   * (e.g. "indigo") or any CSS colour, e.g. "#EC1111".
+   * (e.g. "indigo") or any CSS colour, e.g. "#E4572E".
    */
   primary?: string;
   /** Secondary colour. Same accepted values as `primary`. */

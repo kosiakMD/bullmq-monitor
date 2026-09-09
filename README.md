@@ -1,5 +1,12 @@
 # BullMQ Monitor
 
+[![CI](https://github.com/kosiakMD/bullmq-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/kosiakMD/bullmq-monitor/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@bullmq-monitor/root.svg)](https://www.npmjs.com/package/@bullmq-monitor/root)
+[![node](https://img.shields.io/node/v/@bullmq-monitor/root.svg)](https://nodejs.org)
+[![license](https://img.shields.io/npm/l/@bullmq-monitor/root.svg)](./LICENSE)
+
+[Demo](https://kosiakmd.github.io/bullmq-monitor)
+
 Self-hosted dashboard for [BullMQ](https://github.com/taskforcesh/bullmq) and
 [Bull](https://github.com/OptimalBits/bull) queues. Mount it inside the app that
 already owns the queues and get a job browser, filters, metrics and queue
@@ -163,22 +170,22 @@ new BullMonitorExpress({
       // scheme shown on first visit
       mode: 'dark',
       // a Material palette name ("indigo", "teal", …) or any CSS colour
-      primary: '#EC1111',
-      secondary: '#6B6F8C',
+      primary: '#E4572E',
+      secondary: '#6B7280',
       // per-scheme surfaces, so the dashboard matches your app in both
       light: {
-        background: '#F9FAFC',
+        background: '#F8FAFC',
         surface: '#FFFFFF',
-        text: '#1E2028',
-        textSecondary: '#6B6F8C',
-        divider: '#EDEEF3',
+        text: '#0F172A',
+        textSecondary: '#64748B',
+        divider: '#E2E8F0',
       },
       dark: {
-        background: '#131419',
-        surface: '#1E2028',
-        text: '#E6E7EE',
-        textSecondary: '#949AB0',
-        divider: '#2C2E3A',
+        background: '#0F1115',
+        surface: '#171A21',
+        text: '#E5E7EB',
+        textSecondary: '#9CA3AF',
+        divider: '#272B34',
       },
       // hide the appearance controls so viewers keep your branding
       lock: true,
@@ -197,7 +204,7 @@ are tuned separately for light and dark. Override any of them:
 
 ```ts
 theme: {
-  statusColors: { failed: '#D92D20', completed: '#0F860F' },
+  statusColors: { failed: '#D92D20', completed: '#15803D' },
   dark: {
     statusColors: { failed: '#FF6B6B', completed: '#4CC26A' },
   },
@@ -324,6 +331,23 @@ npm run example:express
 
 `REDIS_URL` points the examples and integration tests at another redis.
 `SKIP_INTEGRATION_TESTS=1` skips the tests that need one.
+
+`npm run smoke` boots every framework example in turn and checks that the
+dashboard, its assets, the API and the job name filter all answer.
+
+## Releasing
+
+Versions are managed with lerna and published by CI.
+
+```bash
+npm run version          # bumps, writes the changelog, tags
+git push --follow-tags
+```
+
+Pushing the tag runs `.github/workflows/release.yml`, which rebuilds, runs the
+tests and the smoke suite, then publishes every package to npm with provenance.
+It needs an `NPM_TOKEN` repository secret with publish rights on the
+`@bullmq-monitor` scope.
 
 ## License
 

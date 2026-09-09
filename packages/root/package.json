@@ -2,9 +2,19 @@
   "name": "@bullmq-monitor/root",
   "version": "6.0.0",
   "description": "BullMQ Monitor core: GraphQL API, queue adapters and the bundled dashboard UI",
-  "keywords": ["bullmq", "bull", "queue", "dashboard", "monitor", "redis", "graphql"],
+  "keywords": [
+    "bullmq",
+    "bull",
+    "queue",
+    "dashboard",
+    "monitor",
+    "redis",
+    "graphql"
+  ],
   "author": "Anton Kosiak (https://github.com/kosiakMD)",
-  "contributors": ["Ilya Strus <strax1990@gmail.com> (original bull-monitor author)"],
+  "contributors": [
+    "Ilya Strus <strax1990@gmail.com> (original bull-monitor author)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -15,13 +25,17 @@
   "bugs": "https://github.com/kosiakMD/bullmq-monitor/issues",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "ui", "README.md"],
+  "files": [
+    "dist",
+    "ui",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=20"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json && npm run copy-ui",
@@ -45,12 +59,17 @@
     "ioredis": ">=5.0.0"
   },
   "peerDependenciesMeta": {
-    "bull": { "optional": true },
-    "bullmq": { "optional": true },
-    "ioredis": { "optional": true }
+    "bull": {
+      "optional": true
+    },
+    "bullmq": {
+      "optional": true
+    },
+    "ioredis": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@bullmq-monitor/ui": "^6.0.0",
     "@types/bull": "^4.10.4",
     "@types/lodash": "^4.17.0",
     "@types/redis-info": "^3.0.3",
