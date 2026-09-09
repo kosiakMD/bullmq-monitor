@@ -28,20 +28,18 @@ const useStyles = makeStyles((theme) => ({
   },
   statuses: {
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'flex-start',
+    // no margins on the children: they would indent the first chip past the
+    // fields below it
+    gap: theme.spacing(1),
     maxWidth: '100%',
     overflowX: 'auto',
     flexWrap: 'nowrap',
-    // the per-chip margin would otherwise indent the row past the fields below
-    margin: theme.spacing(-0.5, -0.5, 0.5),
-    padding: theme.spacing(0.5),
+    marginBottom: theme.spacing(1),
     '-webkit-overflow-scrolling': 'touch',
     '& > *': {
-      marginRight: theme.spacing(1),
       flexShrink: 0,
-    },
-    '& > *:last-child': {
-      marginRight: 0,
     },
   },
   count: {

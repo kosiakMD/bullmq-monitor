@@ -170,7 +170,7 @@ new BullMonitorExpress({
       // scheme shown on first visit
       mode: 'dark',
       // a Material palette name ("indigo", "teal", …) or any CSS colour
-      primary: '#E4572E',
+      primary: '#D92D20',
       secondary: '#6B7280',
       // per-scheme surfaces, so the dashboard matches your app in both
       light: {

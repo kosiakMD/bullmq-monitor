@@ -25,17 +25,21 @@ const useStyles = makeStyles((theme) => ({
   },
   chips: {
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
+    // a margin on the children would indent the first chip past everything
+    // below it; gap spaces them without shifting the row
+    gap: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    '& > *': {
-      margin: theme.spacing(0.5),
-    },
     [theme.breakpoints.down('xl')]: {
       maxWidth: '100%',
       overflowX: 'auto',
       flexWrap: 'nowrap',
       '-webkit-overflow-scrolling': 'touch',
+      '& > *': {
+        flexShrink: 0,
+      },
     },
   },
 }));

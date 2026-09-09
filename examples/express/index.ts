@@ -53,7 +53,7 @@ const BASE_URL = '/admin/queues';
       theme: {
         mode: 'dark',
         // one accent for both schemes, then the surfaces each scheme needs
-        primary: '#E4572E',
+        primary: '#D92D20',
         secondary: '#6B7280',
         light: {
           background: '#F8FAFC',
