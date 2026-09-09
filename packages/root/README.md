@@ -26,6 +26,10 @@ new BullMQAdapter(new Queue('audit', { connection }), { readonly: true });
 new BullAdapter(bullQueue);
 ```
 
+`bull`, `bullmq` and `ioredis` are optional peer dependencies, resolved only
+when a code path needs them. An app that uses BullMQ alone does not need `bull`
+installed.
+
 `BullMQAdapter` accepts BullMQ v5 and v6. Its parameter is typed structurally
 rather than against the `Queue` class, because v6 reshaped that class; one build
 of this package therefore works with both.

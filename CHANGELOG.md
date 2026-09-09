@@ -68,6 +68,9 @@ original packages.
   count. It now reports what is actually loaded.
 - `BullMQAdapter` no longer pins consumers to the bullmq version this package
   was built against; its queue parameter is typed structurally.
+- Importing the package no longer requires `bull`. It is an optional peer
+  dependency, but the entry point pulled it in eagerly, so any app that only
+  uses BullMQ crashed on import.
 - The top bar no longer floods the page with the brand colour; it uses the
   surface colour and follows the configured palette.
 - The status palette dropped the heavy blue that turned muddy on dark

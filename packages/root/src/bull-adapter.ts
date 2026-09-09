@@ -10,8 +10,23 @@ import type {
 import { JobStatus } from './queue';
 import type { Queue as BullQueue, Job as BullJob } from 'bull';
 import type { Maybe } from './typings/utils';
-// this is required due to bad bull typings
-import * as Bull from 'bull';
+
+/**
+ * bull is an optional peer dependency: an app that only uses BullMQ has no
+ * reason to install it. Requiring it at module load would crash such an app the
+ * moment it imports anything from this package, so it is resolved lazily, and
+ * only on the one code path that needs the runtime class.
+ */
+const loadBull = (): any => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require('bull');
+  } catch (_e) {
+    throw new Error(
+      'BullAdapter needs the "bull" package. Install it, or use BullMQAdapter instead.'
+    );
+  }
+};
 
 export class BullJobAdapter extends Job {
   constructor(
@@ -213,9 +228,9 @@ export class BullAdapter extends Queue {
     }
   }
   public jobFromJSON(json: any, jobId: JobId, knownStatus?: JobStatus): Job {
-    // Bull.Job.fromJSON exists at runtime but is missing from the typings
+    // Job.fromJSON exists at runtime but is missing from the bull typings
     return this.normalizeJob(
-      (Bull as any).Job.fromJSON(this._queue, json, jobId),
+      loadBull().Job.fromJSON(this._queue, json, jobId),
       knownStatus
     );
   }
