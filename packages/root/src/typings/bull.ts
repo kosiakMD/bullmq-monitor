@@ -48,8 +48,14 @@ export type BullQueueLike = {
   isPaused(): Promise<boolean>;
 
   getJob(id: any): Promise<any>;
-  getJobs(types: any[], start?: number, end?: number, asc?: boolean): Promise<any[]>;
-  getJobCounts(): Promise<Record<string, number>>;
+  getJobs(
+    types: any[],
+    start?: number,
+    end?: number,
+    asc?: boolean
+  ): Promise<any[]>;
+  // bull types this as a fixed JobCounts object, which has no index signature
+  getJobCounts(): Promise<any>;
   getActiveCount(): Promise<number>;
   getCompletedCount(): Promise<number>;
   getFailedCount(): Promise<number>;

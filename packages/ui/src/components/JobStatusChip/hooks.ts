@@ -40,8 +40,7 @@ const DARK_OVERRIDES: Partial<Record<JobStatus, string>> = {
 };
 
 const buildPalette = (mode: TThemeMode): Record<JobStatus, string> => {
-  const base =
-    mode === 'dark' ? { ...BASE, ...DARK_OVERRIDES } : { ...BASE };
+  const base = mode === 'dark' ? { ...BASE, ...DARK_OVERRIDES } : { ...BASE };
   const overrides = themeColorsFor(ServerThemeConfig, mode).statusColors;
   if (!overrides) return base;
   return { ...base, ...overrides } as Record<JobStatus, string>;
