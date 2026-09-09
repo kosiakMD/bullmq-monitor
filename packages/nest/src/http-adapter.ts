@@ -69,6 +69,15 @@ export function sendNotFound(res: any): void {
   res.status(404).set('Content-Type', 'text/plain').send('Not found');
 }
 
+export function requestPath(req: any): string {
+  return requestUrl(req).split('?')[0];
+}
+
+/** sends a raw response produced by the auth guard */
+export function sendRaw(res: any, result: HttpGraphQLResponse): void {
+  sendGraphQL(res, result);
+}
+
 export function sendGraphQL(res: any, result: HttpGraphQLResponse): void {
   if (isFastifyReply(res)) {
     res.code(result.status);

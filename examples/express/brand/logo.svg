@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 28" width="168" height="28" role="img" aria-label="Example Queues">
-  <rect x="0" y="4" width="20" height="20" rx="5" fill="#0f62fe"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 28" width="172" height="28" role="img" aria-label="Example Queues">
+  <rect x="0" y="4" width="20" height="20" rx="5" fill="#EC1111"/>
   <circle cx="10" cy="14" r="5" fill="#ffffff"/>
-  <text x="28" y="20" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">Example</text>
-  <text x="98" y="20" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="300" letter-spacing="1.5" fill="#ff7eb6">QUEUES</text>
+  <text x="28" y="20" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#EC1111">Example</text>
+  <text x="100" y="20" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="300" letter-spacing="1.5" fill="#8A8FA6">QUEUES</text>
 </svg>

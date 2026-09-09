@@ -11,6 +11,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useRemoveJobSelectionOnUnmount } from './hooks';
 import ms from 'ms';
 import AccordionJsonView from '@/components/AccordionJsonView';
+import clsx from 'clsx';
 import { usePreferencesStore } from '@/stores/preferences';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,20 +23,38 @@ const useStyles = makeStyles((theme) => ({
   extraCell: {
     paddingTop: 0,
   },
-  extraOneCol: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
+  /**
+   * The details row spans the whole table, which is wider than the viewport on
+   * small screens. Sticking it to the left edge keeps the panels (and their
+   * copy buttons) on screen instead of scrolling off to the right.
+   */
+  extraSticky: {
+    position: 'sticky',
+    left: 0,
+    width: 'min(100%, calc(100vw - 32px))',
+    maxWidth: '100%',
   },
-  extraTwoCol: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridGap: theme.spacing(1),
-    [theme.breakpoints.down('xl')]: {
-      gridTemplateColumns: '1fr',
-    },
+  /**
+   * One column, always. The panels sit inside a row that spans the full table
+   * width, which is wider than the viewport, so a multi-column grid pushes the
+   * right-hand panel (and its copy button) off screen.
+   */
+  extraPanels: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(1),
   },
+  // a stack trace should read as an error without becoming a solid red block
   stacktrace: {
-    backgroundColor: theme.palette.error.main,
+    color: theme.palette.mode === 'dark' ? '#FF9B9B' : '#9B1C1C',
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? 'rgba(255, 107, 107, 0.08)'
+        : 'rgba(155, 28, 28, 0.05)',
+    borderColor:
+      theme.palette.mode === 'dark'
+        ? 'rgba(255, 107, 107, 0.28)'
+        : 'rgba(155, 28, 28, 0.18)',
   },
 }));
 const Job = ({
@@ -55,8 +74,10 @@ const Job = ({
   );
   const hasData = !!job.data && job.data !== '{}';
   const hasStacktrace = !isempty(job.stacktrace);
+  const hasFailedReason = !isempty(job.failedReason);
   const hasReturnValue = !isempty(job.returnValue);
-  const showExtra = hasData || hasStacktrace || hasReturnValue;
+  const showExtra =
+    hasData || hasStacktrace || hasReturnValue || hasFailedReason;
   return (
     <>
       <TableRow className={showExtra ? cls.rowWithExtra : undefined}>
@@ -85,14 +106,7 @@ const Job = ({
       {showExtra && (
         <TableRow>
           <TableCell className={cls.extraCell} colSpan={12}>
-            <div
-              className={
-                [hasData, hasStacktrace, hasReturnValue].filter(Boolean)
-                  .length > 1
-                  ? cls.extraTwoCol
-                  : cls.extraOneCol
-              }
-            >
+            <div className={clsx(cls.extraSticky, cls.extraPanels)}>
               {hasData && (
                 <AccordionJsonView
                   defaultExpanded={prefs.expandJobData}
@@ -107,6 +121,15 @@ const Job = ({
                   header="Return Value"
                 >
                   {job.returnValue}
+                </AccordionJsonView>
+              )}
+              {hasFailedReason && (
+                <AccordionJsonView
+                  defaultExpanded={prefs.expandJobStackTrace}
+                  textClassName={cls.stacktrace}
+                  header="Error"
+                >
+                  {job.failedReason}
                 </AccordionJsonView>
               )}
               {hasStacktrace && (

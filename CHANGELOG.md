@@ -22,7 +22,11 @@ original packages.
   preset covers lookups by organization, order or customer.
 - **Branding from the host app.** A new `ui` option sets the title, logo,
   favicon, extra top-bar links, date formats and colours without rebuilding the
-  dashboard. `ui.theme.lock` hides the appearance controls.
+  dashboard. Light and dark palettes are configured separately, down to
+  surfaces, text and per-status colours. `ui.theme.lock` hides the appearance
+  controls.
+- **Auth.** An `auth` guard in the core config protects the page, its assets and
+  the GraphQL endpoint on every adapter, with a `basicAuth` helper included.
 - **`@bullmq-monitor/nest`.** A real NestJS module with `forRoot` and
   `forRootAsync`, replacing the copy-paste example. Routes are declared without
   wildcards, so it behaves the same on Nest 10, 11 and 12, on Express or Fastify.
@@ -64,6 +68,10 @@ original packages.
   count. It now reports what is actually loaded.
 - `BullMQAdapter` no longer pins consumers to the bullmq version this package
   was built against; its queue parameter is typed structurally.
+- The top bar no longer floods the page with the brand colour; it uses the
+  surface colour and follows the configured palette.
+- The status palette dropped the heavy blue that turned muddy on dark
+  backgrounds, and now has separate light and dark sets.
 
 ### Dependencies
 

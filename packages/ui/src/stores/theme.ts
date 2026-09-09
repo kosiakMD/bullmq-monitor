@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import createStore from 'zustand';
 import { createTheme } from '@mui/material/styles';
-import type { PaletteOptions } from '@mui/material/styles';
+import type { PaletteOptions, ThemeOptions } from '@mui/material/styles';
 import { persist } from 'zustand/middleware';
 import { StorageConfig } from '@/config/storage';
-import { ServerThemeConfig } from '@/config/ui';
-import type { TThemeMode } from '@/config/ui';
+import { ServerThemeConfig, themeColorsFor } from '@/config/ui';
+import type { TThemeColors, TThemeMode } from '@/config/ui';
 
 import {
   deepPurple,
@@ -51,9 +51,9 @@ const isBuiltInPalette = (value?: string): value is TPalette =>
   !!value && value in palettesMap;
 
 /**
- * Resolves a configured colour into something MUI accepts.
- * A built-in palette name keeps its full set of shades; anything else is
- * treated as a CSS colour and used as the main tone.
+ * Resolves a configured colour into something MUI accepts. A built-in palette
+ * name keeps its full set of shades; anything else is treated as a CSS colour
+ * and used as the main tone.
  */
 const resolveColor = (value: string | undefined, fallback: any) => {
   if (!value) return fallback;
@@ -61,11 +61,19 @@ const resolveColor = (value: string | undefined, fallback: any) => {
   return { main: value };
 };
 
+/** true when the server pinned a colour that the palette picker cannot express */
+export const hasCustomPrimary = (): boolean =>
+  (['light', 'dark'] as TThemeMode[]).some((mode) => {
+    const primary = themeColorsFor(ServerThemeConfig, mode).primary;
+    return !!primary && !isBuiltInPalette(primary);
+  });
+
 /** the server's branding wins on first load, the viewer can change it after */
 const DEFAULT_THEME: TTheme = ServerThemeConfig.mode ?? 'dark';
-const DEFAULT_PALETTE: TPalette = isBuiltInPalette(ServerThemeConfig.primary)
-  ? ServerThemeConfig.primary
-  : 'deepPurple';
+const DEFAULT_PALETTE: TPalette = (() => {
+  const primary = themeColorsFor(ServerThemeConfig, DEFAULT_THEME).primary;
+  return isBuiltInPalette(primary) ? primary : 'deepPurple';
+})();
 
 type TState = {
   theme: TTheme;
@@ -88,10 +96,31 @@ export const useThemeStore = createStore<TState>()(
     }),
     {
       name: `${StorageConfig.persistNs}theme`,
-      version: 2,
+      version: 3,
     }
   )
 );
+
+/** surfaces and text the host app pinned, left to MUI's defaults otherwise */
+const buildSurfaces = (colors: TThemeColors): Partial<PaletteOptions> => {
+  const palette: Record<string, unknown> = {};
+  if (colors.background || colors.surface) {
+    palette.background = {
+      ...(colors.background ? { default: colors.background } : {}),
+      ...(colors.surface ? { paper: colors.surface } : {}),
+    };
+  }
+  if (colors.text || colors.textSecondary) {
+    palette.text = {
+      ...(colors.text ? { primary: colors.text } : {}),
+      ...(colors.textSecondary ? { secondary: colors.textSecondary } : {}),
+    };
+  }
+  if (colors.divider) {
+    palette.divider = colors.divider;
+  }
+  return palette as Partial<PaletteOptions>;
+};
 
 export const getMuiTheme = () => {
   const [theme, palette] = useThemeStore((state) => [
@@ -99,18 +128,22 @@ export const getMuiTheme = () => {
     state.palette,
   ]);
   return useMemo(() => {
-    // a custom css colour from the server has no palette name to store, so it
-    // is applied here rather than through the palette picker
+    const colors = themeColorsFor(ServerThemeConfig, theme);
+    // a custom css colour has no palette name to store, so it is applied here
+    // rather than through the palette picker
     const usesCustomPrimary =
-      !!ServerThemeConfig.primary &&
-      !isBuiltInPalette(ServerThemeConfig.primary);
-    const paletteOptions: PaletteOptions = {
-      primary: usesCustomPrimary
-        ? resolveColor(ServerThemeConfig.primary, palettesMap[palette])
-        : palettesMap[palette],
-      secondary: resolveColor(ServerThemeConfig.secondary, red),
-      mode: theme,
+      !!colors.primary && !isBuiltInPalette(colors.primary);
+    const options: ThemeOptions = {
+      palette: {
+        mode: theme,
+        primary: usesCustomPrimary
+          ? resolveColor(colors.primary, palettesMap[palette])
+          : (palettesMap[(colors.primary as TPalette) ?? palette] ??
+            palettesMap[palette]),
+        secondary: resolveColor(colors.secondary, red),
+        ...buildSurfaces(colors),
+      },
     };
-    return createTheme({ palette: paletteOptions });
+    return createTheme(options);
   }, [theme, palette]);
 };

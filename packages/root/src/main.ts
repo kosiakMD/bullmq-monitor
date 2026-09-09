@@ -21,6 +21,8 @@ import {
   UI_ASSETS_PATH,
 } from './constants';
 import { toHeaderMap } from './http';
+import { evaluateAuth } from './auth';
+import type { AuthContext } from './auth';
 import type {
   Config,
   MetricsConfig,
@@ -117,6 +119,17 @@ export abstract class BullMonitor {
     }
     await this.server.start();
   }
+  /**
+   * Runs the configured auth guard.
+   * Returns a ready-to-send response when the request must be refused, and
+   * null when it may proceed. Adapters call it before every route.
+   */
+  protected async authorize(
+    ctx: AuthContext
+  ): Promise<HttpGraphQLResponse | null> {
+    return evaluateAuth(this.config.auth, ctx);
+  }
+
   /** Handles a GraphQL http request. `body` must be already parsed for POST requests. */
   protected async handleGraphQLRequest(
     req: HttpGraphQLRequest

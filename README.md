@@ -160,16 +160,53 @@ new BullMonitorExpress({
     // dayjs tokens: https://day.js.org/docs/en/display/format
     dateFormats: { short: 'DD.MM HH:mm:ss', full: 'YYYY-MM-DD HH:mm:ss' },
     theme: {
+      // scheme shown on first visit
       mode: 'dark',
       // a Material palette name ("indigo", "teal", …) or any CSS colour
-      primary: '#0f62fe',
-      secondary: '#ff7eb6',
+      primary: '#EC1111',
+      secondary: '#6B6F8C',
+      // per-scheme surfaces, so the dashboard matches your app in both
+      light: {
+        background: '#F9FAFC',
+        surface: '#FFFFFF',
+        text: '#1E2028',
+        textSecondary: '#6B6F8C',
+        divider: '#EDEEF3',
+      },
+      dark: {
+        background: '#131419',
+        surface: '#1E2028',
+        text: '#E6E7EE',
+        textSecondary: '#949AB0',
+        divider: '#2C2E3A',
+      },
       // hide the appearance controls so viewers keep your branding
       lock: true,
     },
   },
 });
 ```
+
+Colours set at the top level of `theme` apply to both schemes; `light` and
+`dark` override them per scheme. Every field is optional.
+
+### Status colours
+
+Job statuses are colour-coded so a queue reads at a glance. The built-in sets
+are tuned separately for light and dark. Override any of them:
+
+```ts
+theme: {
+  statusColors: { failed: '#D92D20', completed: '#0F860F' },
+  dark: {
+    statusColors: { failed: '#FF6B6B', completed: '#4CC26A' },
+  },
+}
+```
+
+Keys are job statuses: `waiting`, `active`, `completed`, `failed`, `delayed`,
+`paused`, `prioritized`, `stuck`, `unknown`. Statuses you leave out keep the
+built-in colour.
 
 | Field | Meaning |
 | --- | --- |
@@ -179,7 +216,7 @@ new BullMonitorExpress({
 | `links` | Extra links in the top bar |
 | `dateFormats` | `{ short, full }` dayjs formats for the table and job details |
 | `filterPresets` | Saved searches offered in the jobs screen |
-| `theme` | `{ mode, primary, secondary, lock }` |
+| `theme` | Colours, see below |
 
 Serve the referenced images yourself; the dashboard only points at the urls you
 give it. Without `theme.lock`, viewers can still switch light/dark and pick a
@@ -217,6 +254,40 @@ whole family of lookups: by organization, by order, by customer.
 
 Fields a preset leaves out are cleared, so switching presets never leaves a
 stale filter behind.
+
+## Auth
+
+The dashboard exposes queue data, so put something in front of it. `auth` runs
+inside the monitor and guards all three routes: the page, its assets and the
+GraphQL endpoint. It works the same on every adapter.
+
+```ts
+import { basicAuth } from '@bullmq-monitor/root';
+
+new BullMonitorExpress({
+  queues,
+  auth: basicAuth({ users: { admin: process.env.QUEUES_PASSWORD! } }),
+});
+```
+
+Any check you already have works too. The guard receives the request and returns
+a boolean, or a decision if you want to control the response:
+
+```ts
+auth: async ({ headers, path, method }) => {
+  const user = await sessionFromCookie(headers.cookie);
+  if (user?.isAdmin) return true;
+  return { authorized: false, status: 403, body: 'Admins only' };
+},
+```
+
+Guards run before anything is served, so an unauthorized caller never reaches
+the queue data. Basic auth is fine for an internal dashboard behind TLS; put a
+real identity provider in front of anything wider.
+
+Framework middleware still works if you prefer it: mount the router behind your
+own middleware in Express or Nest, pass `middleware` to the Koa adapter, or an
+`auth` strategy name to the Hapi one.
 
 ## Read-only queues
 

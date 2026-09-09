@@ -40,6 +40,19 @@ of this package therefore works with both.
 | `gqlIntrospection` | `true` unless `NODE_ENV=production` | Enable GraphQL introspection |
 | `textSearchScanCount` | `500` | Redis SCAN batch size used by the job filters |
 | `metrics` | `false` | Metrics collector config |
+| `auth` | — | Guard run before every dashboard route |
+
+## Auth
+
+```ts
+import { basicAuth } from '@bullmq-monitor/root';
+
+auth: basicAuth({ users: { admin: process.env.QUEUES_PASSWORD! } });
+```
+
+A guard receives `{ method, path, headers, search }` and returns a boolean, or
+`{ authorized, status?, headers?, body? }` to shape the refusal. It runs before
+the page, the assets and the GraphQL endpoint.
 
 ## Writing an adapter
 
@@ -53,6 +66,7 @@ class MyAdapter extends BullMonitor {
     this.createServer();
     await this.startServer();
 
+    // every route first: const refusal = await this.authorize({ method, path, headers, search })
     // GET <base>/            -> this.renderUi(basePath)
     // GET <base>/ui/:file    -> this.getUiAsset(file)
     // GET|POST <base>/graphql-> this.handleGraphQLRequest({ method, headers, search, body })

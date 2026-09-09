@@ -32,10 +32,16 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     overflowX: 'auto',
     flexWrap: 'nowrap',
-    marginBottom: theme.spacing(1),
+    // the per-chip margin would otherwise indent the row past the fields below
+    margin: theme.spacing(-0.5, -0.5, 0.5),
+    padding: theme.spacing(0.5),
     '-webkit-overflow-scrolling': 'touch',
     '& > *': {
-      margin: theme.spacing(0.5),
+      marginRight: theme.spacing(1),
+      flexShrink: 0,
+    },
+    '& > *:last-child': {
+      marginRight: 0,
     },
   },
   count: {
@@ -48,11 +54,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginBottom: theme.spacing(1),
-    '& > *': {
-      marginRight: theme.spacing(1),
-      marginTop: theme.spacing(1),
-    },
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(0.5),
   },
   idField: {
     minWidth: '120px',

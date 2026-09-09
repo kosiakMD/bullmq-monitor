@@ -1,13 +1,33 @@
 export type TThemeMode = 'light' | 'dark';
 
-export type TServerThemeConfig = {
-  mode?: TThemeMode;
+export type TThemeColors = {
   /** a built-in Material palette name, or any CSS colour */
   primary?: string;
   secondary?: string;
+  background?: string;
+  surface?: string;
+  text?: string;
+  textSecondary?: string;
+  divider?: string;
+  statusColors?: Record<string, string>;
+};
+
+export type TServerThemeConfig = TThemeColors & {
+  mode?: TThemeMode;
+  light?: TThemeColors;
+  dark?: TThemeColors;
   /** hides the appearance controls */
   lock?: boolean;
 };
+
+/** colours for one scheme: shared values first, then the per-scheme overrides */
+export const themeColorsFor = (
+  config: TServerThemeConfig,
+  mode: TThemeMode
+): TThemeColors => ({
+  ...config,
+  ...(mode === 'dark' ? config.dark : config.light),
+});
 
 export type TFilterPreset = {
   label: string;

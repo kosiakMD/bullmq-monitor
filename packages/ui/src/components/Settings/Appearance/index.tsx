@@ -1,6 +1,10 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import { SUPPORTED_PALETTES, useThemeStore } from '@/stores/theme';
+import {
+  SUPPORTED_PALETTES,
+  hasCustomPrimary,
+  useThemeStore,
+} from '@/stores/theme';
 import shallow from 'zustand/shallow';
 import MenuItem from '@mui/material/MenuItem';
 import Alert from '@mui/material/Alert';
@@ -23,9 +27,7 @@ export default function AppearanceSettings() {
       </Alert>
     );
   }
-  const customPrimary =
-    !!ServerThemeConfig.primary &&
-    !SUPPORTED_PALETTES.includes(ServerThemeConfig.primary as any);
+  const customPrimary = hasCustomPrimary();
   return (
     <div>
       <TextField

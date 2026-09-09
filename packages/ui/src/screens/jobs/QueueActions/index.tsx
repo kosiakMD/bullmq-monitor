@@ -31,12 +31,36 @@ import { useQueueData } from '@/hooks/use-queue-data';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
-      margin: theme.spacing(0.5),
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+    flexWrap: 'wrap',
+  },
+  /** neutral by default; the palette shows up on hover, not at rest */
+  action: {
+    color: theme.palette.text.secondary,
+    '&:hover': {
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.action.hover,
     },
-    '& > button:first-child': {
-      marginLeft: 0,
+    '&.Mui-disabled': {
+      color: theme.palette.action.disabled,
     },
+  },
+  /** destructive actions only turn red when the pointer is on them */
+  destructive: {
+    color: theme.palette.text.secondary,
+    '&:hover': {
+      color: theme.palette.error.main,
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+  separator: {
+    width: 1,
+    alignSelf: 'stretch',
+    minHeight: 24,
+    margin: theme.spacing(0, 0.5),
+    backgroundColor: theme.palette.divider,
   },
 }));
 const QueueActions = () => {
@@ -127,20 +151,66 @@ const QueueActions = () => {
   return (
     <div className={classes.root}>
       <Tooltip title="Add job">
-        <IconButton onClick={openCreateJob} disabled={isReadonly}>
-          <AddIcon />
+        <span>
+          <IconButton
+            className={classes.action}
+            size="small"
+            onClick={openCreateJob}
+            disabled={isReadonly}
+          >
+            <AddIcon />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip title="Export jobs as JSON">
+        <IconButton
+          className={classes.action}
+          size="small"
+          onClick={() => {
+            exportMutation.mutate({
+              queue,
+              status,
+              id: jobId,
+              name: jobName || undefined,
+              dataSearch: dataSearch || undefined,
+            });
+          }}
+        >
+          <SaveIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Clean">
-        <IconButton
-          onClick={handleClickClean}
-          color="secondary"
-          disabled={isReadonly}
-          aria-controls="clean-queue-menu"
-          aria-haspopup="true"
-        >
-          <DeleteIcon />
-        </IconButton>
+      <Tooltip title={isQueuePaused ? 'Resume queue' : 'Pause queue'}>
+        <span>
+          <IconButton
+            className={classes.action}
+            size="small"
+            disabled={isReadonly}
+            onClick={() => {
+              if (isQueuePaused) {
+                resumeMutation.mutate(sharedMutationArg);
+              } else {
+                pauseMutation.mutate(sharedMutationArg);
+              }
+            }}
+          >
+            {isQueuePaused ? <PlayIcon /> : <PauseIcon />}
+          </IconButton>
+        </span>
+      </Tooltip>
+      <span className={classes.separator} />
+      <Tooltip title="Clean jobs by status">
+        <span>
+          <IconButton
+            className={classes.destructive}
+            size="small"
+            onClick={handleClickClean}
+            disabled={isReadonly}
+            aria-controls="clean-queue-menu"
+            aria-haspopup="true"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </span>
       </Tooltip>
       <Menu
         id="clean-queue-menu"
@@ -159,43 +229,20 @@ const QueueActions = () => {
         <MenuItem onClick={() => clean(JobStatusClean.Failed)}>Failed</MenuItem>
         <MenuItem onClick={() => clean(JobStatusClean.Paused)}>Paused</MenuItem>
       </Menu>
-      <Tooltip title="Export jobs as JSON">
-        <IconButton
-          onClick={() => {
-            exportMutation.mutate({
-              queue,
-              status,
-              id: jobId,
-              name: jobName || undefined,
-              dataSearch: dataSearch || undefined,
-            });
-          }}
-        >
-          <SaveIcon />
-        </IconButton>
+      <Tooltip title="More actions">
+        <span>
+          <IconButton
+            className={classes.action}
+            size="small"
+            onClick={handleClickMore}
+            disabled={isReadonly}
+            aria-controls="more-queue-actions-menu"
+            aria-haspopup="true"
+          >
+            <MoreIcon />
+          </IconButton>
+        </span>
       </Tooltip>
-      <Tooltip title={isQueuePaused ? 'Resume' : 'Pause'}>
-        <IconButton
-          disabled={isReadonly}
-          onClick={() => {
-            if (isQueuePaused) {
-              resumeMutation.mutate(sharedMutationArg);
-            } else {
-              pauseMutation.mutate(sharedMutationArg);
-            }
-          }}
-        >
-          {isQueuePaused ? <PlayIcon /> : <PauseIcon />}
-        </IconButton>
-      </Tooltip>
-      <IconButton
-        onClick={handleClickMore}
-        disabled={isReadonly}
-        aria-controls="more-queue-actions-menu"
-        aria-haspopup="true"
-      >
-        <MoreIcon />
-      </IconButton>
       <Menu
         id="more-queue-actions-menu"
         anchorEl={moreAnchorEl}

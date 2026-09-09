@@ -1,5 +1,5 @@
 import { BullMonitor, readJsonBody } from '@bullmq-monitor/root';
-import type { Config } from '@bullmq-monitor/root';
+import type { Config, HttpGraphQLResponse } from '@bullmq-monitor/root';
 import { Router } from 'express';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { Server as HttpServer } from 'http';
@@ -38,24 +38,47 @@ export class BullMonitorExpress extends BullMonitor {
 
     const router = Router();
 
-    router.get('/', (req: Request, res: Response) => {
-      res.type('html').send(this.renderUi(this.resolveBase(req)));
+    /** refuses the request when the configured guard says so */
+    const denied = async (req: Request, res: Response): Promise<boolean> => {
+      const refusal = await this.authorize({
+        method: req.method,
+        path: req.originalUrl.split('?')[0],
+        headers: req.headers as Record<string, string | string[] | undefined>,
+        search: this.extractSearch(req),
+      });
+      if (!refusal) return false;
+      this.sendRaw(res, refusal);
+      return true;
+    };
+
+    router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        if (await denied(req, res)) return;
+        res.type('html').send(this.renderUi(this.resolveBase(req)));
+      } catch (e) {
+        next(e);
+      }
     });
 
     router.get(
       `${this.uiAssetsBasePath}/:file`,
-      (req: Request, res: Response) => {
-        const file = req.params.file;
-        const asset = this.getUiAsset(
-          Array.isArray(file) ? file[0] : String(file)
-        );
-        if (!asset) {
-          res.status(404).type('txt').send('Not found');
-          return;
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          if (await denied(req, res)) return;
+          const file = req.params.file;
+          const asset = this.getUiAsset(
+            Array.isArray(file) ? file[0] : String(file)
+          );
+          if (!asset) {
+            res.status(404).type('txt').send('Not found');
+            return;
+          }
+          res.set('Content-Type', asset.contentType);
+          res.set('Cache-Control', 'public, max-age=31536000, immutable');
+          res.send(asset.body);
+        } catch (e) {
+          next(e);
         }
-        res.set('Content-Type', asset.contentType);
-        res.set('Cache-Control', 'public, max-age=31536000, immutable');
-        res.send(asset.body);
       }
     );
 
@@ -65,6 +88,7 @@ export class BullMonitorExpress extends BullMonitor {
       next: NextFunction
     ) => {
       try {
+        if (await denied(req, res)) return;
         let body = req.body;
         const hasParsedBody =
           bodyParsed ?? (body !== undefined && body !== null);
@@ -91,6 +115,14 @@ export class BullMonitorExpress extends BullMonitor {
     router.post(this.gqlBasePath, gqlHandler);
 
     this.router = router;
+  }
+
+  private sendRaw(res: Response, response: HttpGraphQLResponse) {
+    res.status(response.status);
+    for (const [key, value] of Object.entries(response.headers)) {
+      res.setHeader(key, value);
+    }
+    res.send(response.body);
   }
 
   /** express strips the mount path from req.url, so use baseUrl when present */

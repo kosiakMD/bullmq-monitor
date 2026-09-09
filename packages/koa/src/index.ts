@@ -38,6 +38,25 @@ export class BullMonitorKoa extends BullMonitor {
       router.use(middleware);
     }
 
+    // the configured guard runs before every dashboard route
+    router.use(async (ctx: Context, next) => {
+      const refusal = await this.authorize({
+        method: ctx.method,
+        path: ctx.path,
+        headers: ctx.headers as Record<string, string | string[] | undefined>,
+        search: ctx.search,
+      });
+      if (refusal) {
+        ctx.status = refusal.status;
+        for (const [key, value] of Object.entries(refusal.headers)) {
+          ctx.set(key, value);
+        }
+        ctx.body = refusal.body;
+        return;
+      }
+      await next();
+    });
+
     router.get('/', (ctx: Context) => {
       ctx.type = 'text/html';
       ctx.body = this.renderUi(this.baseUrl);

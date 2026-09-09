@@ -31,6 +31,12 @@ import { ServerUiConfig } from '@/config/ui';
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    // a surface-coloured bar follows whatever palette the host configured,
+    // instead of flooding the top of the page with the brand colour
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    backgroundImage: 'none',
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
   menuButton: {
     marginRight: theme.spacing(0.5),
@@ -64,7 +70,12 @@ export default memo(function AppBar() {
   const { screen, toggleScreen } = useActiveScreenStore();
 
   return (
-    <BaseAppBar position="fixed" className={classes.appBar}>
+    <BaseAppBar
+      position="fixed"
+      elevation={0}
+      color="inherit"
+      className={classes.appBar}
+    >
       <Toolbar>
         <IconButton
           color="inherit"

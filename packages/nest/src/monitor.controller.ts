@@ -14,11 +14,13 @@ import {
   hasParsedBody,
   rawRequest,
   requestHeaders,
+  requestPath,
   requestSearch,
   sendAsset,
   sendGraphQL,
   sendHtml,
   sendNotFound,
+  sendRaw,
 } from './http-adapter';
 
 /**
@@ -37,12 +39,18 @@ export function createMonitorController(path: string): Type<any> {
     ) {}
 
     @Get()
-    dashboard(@Req() req: any, @Res() res: any) {
+    async dashboard(@Req() req: any, @Res() res: any) {
+      if (await this.denied(req, res)) return;
       sendHtml(res, this.monitor.renderDashboard(`/${normalized}`));
     }
 
     @Get('ui/:file')
-    uiAsset(@Param('file') file: string, @Res() res: any) {
+    async uiAsset(
+      @Param('file') file: string,
+      @Req() req: any,
+      @Res() res: any
+    ) {
+      if (await this.denied(req, res)) return;
       const asset = this.monitor.asset(file);
       if (!asset) {
         sendNotFound(res);
@@ -61,7 +69,21 @@ export function createMonitorController(path: string): Type<any> {
       await this.handleGraphQL(req, res, 'POST');
     }
 
+    /** refuses the request when the configured guard says so */
+    private async denied(req: any, res: any): Promise<boolean> {
+      const refusal = await this.monitor.guard({
+        method: String(req.method || 'GET').toUpperCase(),
+        path: requestPath(req),
+        headers: requestHeaders(req),
+        search: requestSearch(req),
+      });
+      if (!refusal) return false;
+      sendRaw(res, refusal);
+      return true;
+    }
+
     private async handleGraphQL(req: any, res: any, method: string) {
+      if (await this.denied(req, res)) return;
       let body = req.body;
       if (method === 'POST' && !hasParsedBody(req)) {
         body = await this.monitor.readBody(rawRequest(req));

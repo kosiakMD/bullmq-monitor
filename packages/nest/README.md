@@ -107,8 +107,26 @@ They are declared without wildcards, so the module behaves the same on Nest 10
 
 ## Guards and auth
 
-Apply a guard the usual way, for example globally or with a middleware on the
-path:
+The module accepts the core `auth` guard, which protects the dashboard, its
+assets and the GraphQL endpoint together:
+
+```ts
+import { basicAuth } from '@bullmq-monitor/root';
+
+BullMonitorModule.forRoot({
+  path: '/admin/queues',
+  queues,
+  auth: basicAuth({ users: { admin: process.env.QUEUES_PASSWORD! } }),
+});
+```
+
+Reuse your own session instead when you have one:
+
+```ts
+auth: async ({ headers }) => (await sessionFromCookie(headers.cookie))?.isAdmin === true,
+```
+
+Nest middleware and guards work as usual too:
 
 ```ts
 consumer.apply(AdminAuthMiddleware).forRoutes('/admin/queues');

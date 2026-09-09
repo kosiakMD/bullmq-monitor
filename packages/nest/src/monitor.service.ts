@@ -1,5 +1,6 @@
 import { BullMonitor, readJsonBody } from '@bullmq-monitor/root';
 import type {
+  AuthContext,
   Config,
   HttpGraphQLRequest,
   HttpGraphQLResponse,
@@ -34,6 +35,14 @@ export class BullMonitorNestService extends BullMonitor {
   public async graphql(req: HttpGraphQLRequest): Promise<HttpGraphQLResponse> {
     return this.handleGraphQLRequest(req);
   }
+  /**
+   * Runs the configured auth guard. Returns a ready-to-send response when the
+   * request must be refused, and null when it may proceed.
+   */
+  public async guard(ctx: AuthContext): Promise<HttpGraphQLResponse | null> {
+    return this.authorize(ctx);
+  }
+
   /** reads a JSON body from a raw request when the framework did not parse one */
   public async readBody(req: IncomingMessage): Promise<unknown> {
     return readJsonBody(req);

@@ -50,7 +50,27 @@ const BASE_URL = '/admin/queues';
           name: 'generate-*',
         },
       ],
-      theme: { mode: 'dark', primary: '#0f62fe', secondary: '#ff7eb6' },
+      theme: {
+        mode: 'dark',
+        // one accent for both schemes, then the surfaces each scheme needs
+        primary: '#EC1111',
+        secondary: '#6B6F8C',
+        light: {
+          background: '#F9FAFC',
+          surface: '#FFFFFF',
+          text: '#1E2028',
+          textSecondary: '#6B6F8C',
+          divider: '#EDEEF3',
+        },
+        dark: {
+          background: '#131419',
+          surface: '#1E2028',
+          text: '#E6E7EE',
+          textSecondary: '#949AB0',
+          divider: '#2C2E3A',
+          secondary: '#949AB0',
+        },
+      },
     },
   });
 

@@ -30,6 +30,26 @@ export class BullMonitorHapi extends BullMonitor {
     this.plugin = {
       name: 'bullmq-monitor',
       register: async (server) => {
+        // the configured guard runs before every dashboard route
+        server.ext('onPreHandler', async (req: Request, h: ResponseToolkit) => {
+          if (!req.path.startsWith(this.uiEndpoint)) return h.continue;
+          const refusal = await this.authorize({
+            method: req.method.toUpperCase(),
+            path: req.path,
+            headers: req.headers as Record<
+              string,
+              string | string[] | undefined
+            >,
+            search: req.url.search || '',
+          });
+          if (!refusal) return h.continue;
+          const response = h.response(refusal.body).code(refusal.status);
+          for (const [key, value] of Object.entries(refusal.headers)) {
+            response.header(key, value);
+          }
+          return response.takeover();
+        });
+
         server.route({
           method: 'GET',
           path: this.uiEndpoint,

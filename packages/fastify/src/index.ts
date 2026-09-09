@@ -34,6 +34,31 @@ export class BullMonitorFastify extends BullMonitor {
 
     const base = this.baseUrl || '';
     this.plugin = async (instance: FastifyInstance) => {
+      // the configured guard runs before every dashboard route
+      instance.addHook(
+        'onRequest',
+        async (req: FastifyRequest, reply: FastifyReply) => {
+          const path = req.url.split('?')[0];
+          if (base && !path.startsWith(base)) return;
+          const refusal = await this.authorize({
+            method: req.method,
+            path,
+            headers: req.headers as Record<
+              string,
+              string | string[] | undefined
+            >,
+            search: this.searchFromUrl(req.url),
+          });
+          if (refusal) {
+            reply.code(refusal.status);
+            for (const [key, value] of Object.entries(refusal.headers)) {
+              reply.header(key, value);
+            }
+            await reply.send(refusal.body);
+          }
+        }
+      );
+
       instance.get(base || '/', async (_req, reply: FastifyReply) => {
         return reply.type('text/html').send(this.renderUi(base));
       });

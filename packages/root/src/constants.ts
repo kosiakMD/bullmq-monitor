@@ -14,6 +14,7 @@ export const DEFAULT_ROOT_CONFIG: Required<Config> = {
   textSearchScanCount: DEFAULT_DATA_SEARCH_SCAN_COUNT,
   metrics: false,
   ui: {},
+  auth: undefined as any,
 };
 export const DEFAULT_METRICS_CONFIG: Required<MetricsConfig> = {
   redisPrefix: 'bull_monitor::metrics::',

@@ -14,8 +14,7 @@
     "@bullmq-monitor/express": "*",
     "@bullmq-monitor/root": "*",
     "bullmq": "^6.0.0",
-    "express": "^5.1.0",
-    "express-basic-auth": "^1.2.1"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

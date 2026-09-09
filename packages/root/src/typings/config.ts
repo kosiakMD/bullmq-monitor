@@ -1,5 +1,6 @@
 import type { SimpleIntervalSchedule } from 'toad-scheduler';
 import type { Queue } from '../queue';
+import type { AuthGuard } from '../auth';
 
 export type MetricsConfig = {
   /** redis key prefix for persisted metrics. default: "bull_monitor::metrics::" */
@@ -16,20 +17,51 @@ export type QueueConfig = {
 };
 
 /**
- * Colours for the dashboard. Whatever is set here becomes the default the
- * viewer sees; they can still override it from the settings dialog unless
- * `lock` is true.
+ * One colour scheme. Every field is optional: whatever is left out keeps the
+ * dashboard default, so a single accent colour is a valid config.
  */
-export type UiThemeConfig = {
-  /** default colour scheme. default: "dark" */
-  mode?: 'light' | 'dark';
+export type UiThemeColors = {
   /**
    * Primary colour. Either the name of a built-in Material palette
-   * (e.g. "indigo") or any CSS colour, e.g. "#0f62fe".
+   * (e.g. "indigo") or any CSS colour, e.g. "#EC1111".
    */
   primary?: string;
   /** Secondary colour. Same accepted values as `primary`. */
   secondary?: string;
+  /** Page background. */
+  background?: string;
+  /** Cards, tables, the top bar and the drawer. */
+  surface?: string;
+  /** Main text colour. */
+  text?: string;
+  /** Dimmed text: labels, captions, secondary rows. */
+  textSecondary?: string;
+  /** Borders and dividers. */
+  divider?: string;
+  /**
+   * Per-status colours for the job chips and the queue counters, keyed by job
+   * status ("waiting", "active", "completed", "failed", "delayed", "paused",
+   * "prioritized", "stuck", "unknown"). Only the statuses you name are
+   * overridden; the rest keep the built-in scheme.
+   */
+  statusColors?: Record<string, string>;
+};
+
+/**
+ * Colours for the dashboard. Whatever is set here becomes the default the
+ * viewer sees; they can still switch light/dark from the settings dialog unless
+ * `lock` is true.
+ *
+ * Colours at the top level apply to both schemes; `light` and `dark` override
+ * them per scheme, which is how an app with two distinct palettes is matched.
+ */
+export type UiThemeConfig = UiThemeColors & {
+  /** scheme shown on first visit. default: "dark" */
+  mode?: 'light' | 'dark';
+  /** overrides applied in light mode */
+  light?: UiThemeColors;
+  /** overrides applied in dark mode */
+  dark?: UiThemeColors;
   /** Hide the appearance controls so the branding cannot be changed. */
   lock?: boolean;
 };
@@ -122,6 +154,11 @@ export type Config = {
   metrics?: MetricsConfig | false;
   /** branding of the dashboard: title, logo, favicon, links, colours */
   ui?: UiConfig;
+  /**
+   * Guards every dashboard route. Runs before the page, its assets and the
+   * GraphQL endpoint, so an unauthorized caller cannot reach the queue data.
+   */
+  auth?: AuthGuard;
 };
 
 /** framework-agnostic representation of an incoming GraphQL http request */
