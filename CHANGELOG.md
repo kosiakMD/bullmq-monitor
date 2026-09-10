@@ -83,6 +83,10 @@ original packages.
   tone, which the original 800 shade turned muddy against a dark surface.
 - The selected queue in the drawer is tinted neutrally instead of with the
   brand colour, which went brown once a warm accent was configured.
+- In dark mode MUI painted a translucent white gradient over raised surfaces, so
+  dialogs, menus and cards came out lighter than the configured colour. The
+  overlay is dropped once a surface colour is set, and the configured surface is
+  what you actually see.
 - The selected status filter takes the colour of its own status rather than the
   brand colour, so the row keeps reading as a legend instead of turning every
   selection into one colour.

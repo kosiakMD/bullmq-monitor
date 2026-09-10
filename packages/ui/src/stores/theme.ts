@@ -144,6 +144,25 @@ export const getMuiTheme = () => {
         ...buildSurfaces(colors),
       },
     };
+    if (colors.surface || colors.background) {
+      /**
+       * In dark mode MUI paints a translucent white gradient over raised
+       * surfaces, so dialogs, menus and cards come out lighter than the colour
+       * the host configured. Dropping the overlay makes the configured surface
+       * the colour you actually see.
+       *
+       * `!important` is deliberate: the per-elevation styles land in the same
+       * generated class after the theme overrides, so a plain declaration
+       * loses to them.
+       */
+      options.components = {
+        MuiPaper: {
+          styleOverrides: {
+            root: { backgroundImage: 'none !important' },
+          },
+        },
+      };
+    }
     return createTheme(options);
   }, [theme, palette]);
 };
