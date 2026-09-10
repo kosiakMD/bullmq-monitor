@@ -87,6 +87,11 @@ original packages.
   dialogs, menus and cards came out lighter than the configured colour. The
   overlay is dropped once a surface colour is set, and the configured surface is
   what you actually see.
+- Status chips put 5px before the count and 12px after the label, because MUI
+  insets a chip avatar for a round image rather than a number. Both insets are
+  now equal.
+- A logo that fails to load falls back to the title as text instead of leaving a
+  broken image in the top bar.
 - The selected status filter takes the colour of its own status rather than the
   brand colour, so the row keeps reading as a legend instead of turning every
   selection into one colour.

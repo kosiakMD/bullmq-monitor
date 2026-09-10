@@ -42,11 +42,24 @@ const useStyles = makeStyles((theme) => ({
       flexShrink: 0,
     },
   },
+  /**
+   * MUI insets a chip avatar by 5px on the left and pulls the label back by
+   * 6px, which is tuned for a round avatar image. With a plain number in there
+   * the chip ends up with 5px before the count and 12px after the label, so it
+   * reads as pushed to the left. These two rules make both insets 12px and
+   * leave a 6px gap between the count and the label.
+   */
   count: {
     width: 'auto !important',
     backgroundColor: 'transparent !important',
     display: 'flex',
     alignItems: 'center',
+    marginLeft: `${theme.spacing(1.5)} !important`,
+    marginRight: '0 !important',
+  },
+  countLabel: {
+    paddingLeft: theme.spacing(0.75),
+    paddingRight: theme.spacing(1.5),
   },
   textFields: {
     display: 'flex',
@@ -89,7 +102,7 @@ export default function JobsFilters() {
       <div className={cls.statuses}>
         {counts.map(({ value, label, isActive, onClick, color }, idx) => (
           <Chip
-            classes={{ avatar: cls.count }}
+            classes={{ avatar: cls.count, label: cls.countLabel }}
             avatar={<div>{value}</div>}
             key={idx}
             onClick={onClick}
