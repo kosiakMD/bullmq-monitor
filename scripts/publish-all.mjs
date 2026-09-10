@@ -1,12 +1,19 @@
 /**
  * Publishes every package to npm in dependency order.
  *
- * Needs NPM_TOKEN: a granular access token with write access to the
- * @bullmq-monitor scope and "bypass 2FA" enabled, since npm refuses a plain
- * `npm publish` without either that or an OTP.
+ * npm requires a one-time password for a direct publish. Run this from your own
+ * terminal and npm will email the code and prompt for it:
  *
- *   NPM_TOKEN=npm_xxx npm run publish:all
- *   NPM_TOKEN=npm_xxx npm run publish:all -- --dry-run
+ *   npm run publish:all
+ *
+ * Non-interactive alternatives:
+ *
+ *   npm run publish:all -- --otp=123456      # code from the email
+ *   NPM_TOKEN=npm_xxx npm run publish:all    # granular token, bypass 2FA
+ *   npm run publish:all -- --dry-run
+ *
+ * The prompt only works when a terminal is attached, so the OTP is asked once
+ * and reused for every package in the run.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -17,14 +24,18 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dryRun = process.argv.includes('--dry-run');
+const otpArg = process.argv.find((a) => a.startsWith('--otp='));
+const otp = otpArg ? otpArg.slice('--otp='.length) : undefined;
 const token = process.env.NPM_TOKEN;
+const interactive = process.stdin.isTTY && process.stdout.isTTY;
 
-if (!token && !dryRun) {
+if (!token && !otp && !dryRun && !interactive) {
   console.error(
-    'NPM_TOKEN is not set.\n' +
-      'Create a granular access token with write access to the @bullmq-monitor\n' +
-      'scope and "bypass 2FA" enabled: https://www.npmjs.com/settings/~/tokens/new\n' +
-      'Then run: NPM_TOKEN=npm_xxx npm run publish:all'
+    'npm needs a one-time password to publish, and there is no terminal to ask on.\n' +
+      'Run this from your own terminal, or pass the code from the email:\n' +
+      '  npm run publish:all -- --otp=123456\n' +
+      'or use a granular token with bypass 2FA:\n' +
+      '  NPM_TOKEN=npm_xxx npm run publish:all'
   );
   process.exit(1);
 }
@@ -50,12 +61,14 @@ try {
     );
     const args = ['publish', '--access', 'public'];
     if (dryRun) args.push('--dry-run');
+    if (otp) args.push(`--otp=${otp}`);
 
     process.stdout.write(`publishing ${manifest.name}@${manifest.version} ... `);
     try {
       execFileSync('npm', args, {
         cwd: dir,
-        stdio: ['ignore', 'ignore', 'pipe'],
+        // inherit when npm may need to prompt for the one-time password
+        stdio: token || otp || dryRun ? ['ignore', 'ignore', 'pipe'] : 'inherit',
         env: { ...process.env, ...(npmrc ? { npm_config_userconfig: npmrc } : {}) },
       });
       console.log('ok');

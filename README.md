@@ -371,18 +371,26 @@ Re-run `npm run pack:local` and `npm install` in the app after each change.
 
 ## Releasing
 
-npm refuses a plain `npm publish` without either an OTP or a granular access
-token with "bypass 2FA" enabled, so publishing takes a token either way.
+npm asks for a one-time password on a direct publish and emails the code, so
+run this from your own terminal:
 
 ```bash
-npm run version                       # bumps, writes the changelog, tags
-NPM_TOKEN=npm_xxx npm run publish:all # builds, then publishes in dependency order
+npm run version        # bumps, writes the changelog, tags
+npm run publish:all    # builds, then publishes in dependency order
 git push --follow-tags
 ```
 
-`publish:all` writes the token to a temporary npmrc it deletes afterwards, and
-skips any package whose version is already on the registry, so a failed run can
-simply be repeated.
+The code is asked once and reused for every package. Non-interactive
+alternatives:
+
+```bash
+npm run publish:all -- --otp=123456      # code from the email
+NPM_TOKEN=npm_xxx npm run publish:all    # granular token with bypass 2FA
+```
+
+A token is written to a temporary npmrc that is deleted afterwards, and any
+version already on the registry is skipped, so a partial run can simply be
+repeated.
 
 CI can do the same: push a tag and `.github/workflows/release.yml` rebuilds,
 runs the tests and the smoke suite, then publishes with provenance. It needs the
