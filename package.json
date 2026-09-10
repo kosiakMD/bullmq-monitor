@@ -36,10 +36,10 @@
     "example:hapi": "npm start -w examples/hapi",
     "example:fastify": "npm start -w examples/fastify",
     "version": "lerna version --no-push",
-    "publish:packages": "lerna publish from-package --yes",
     "deploy:demo": "npm run build:demo && gh-pages -d packages/ui/build",
     "smoke": "node scripts/smoke.mjs",
-    "pack:local": "npm run build && node scripts/pack-local.mjs"
+    "pack:local": "npm run build && node scripts/pack-local.mjs",
+    "publish:all": "npm run build && node scripts/publish-all.mjs"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

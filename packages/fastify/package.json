@@ -47,5 +47,6 @@
   "devDependencies": {
     "fastify": "^5.1.0",
     "typescript": "^5.9.0"
-  }
+  },
+  "gitHead": "cfba976965f1b0df5a8d0f6e5fe89b1ac490fa3b"
 }

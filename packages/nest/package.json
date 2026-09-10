@@ -52,5 +52,6 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typescript": "^5.9.0"
-  }
+  },
+  "gitHead": "cfba976965f1b0df5a8d0f6e5fe89b1ac490fa3b"
 }

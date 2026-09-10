@@ -371,17 +371,25 @@ Re-run `npm run pack:local` and `npm install` in the app after each change.
 
 ## Releasing
 
-Versions are managed with lerna and published by CI.
+npm refuses a plain `npm publish` without either an OTP or a granular access
+token with "bypass 2FA" enabled, so publishing takes a token either way.
 
 ```bash
-npm run version          # bumps, writes the changelog, tags
+npm run version                       # bumps, writes the changelog, tags
+NPM_TOKEN=npm_xxx npm run publish:all # builds, then publishes in dependency order
 git push --follow-tags
 ```
 
-Pushing the tag runs `.github/workflows/release.yml`, which rebuilds, runs the
-tests and the smoke suite, then publishes every package to npm with provenance.
-It needs an `NPM_TOKEN` repository secret with publish rights on the
-`@bullmq-monitor` scope.
+`publish:all` writes the token to a temporary npmrc it deletes afterwards, and
+skips any package whose version is already on the registry, so a failed run can
+simply be repeated.
+
+CI can do the same: push a tag and `.github/workflows/release.yml` rebuilds,
+runs the tests and the smoke suite, then publishes with provenance. It needs the
+same token as an `NPM_TOKEN` repository secret.
+
+The `@bullmq-monitor` scope requires an npm organisation of that name; a
+personal account can only publish to its own `@username` scope.
 
 ## License
 
