@@ -347,6 +347,28 @@ npm run example:express
 `npm run smoke` boots every framework example in turn and checks that the
 dashboard, its assets, the API and the job name filter all answer.
 
+## Using it before it is published
+
+To try a change in a real app without publishing anything:
+
+```bash
+npm run pack:local          # writes ./dist-packages/*.tgz
+```
+
+then in the consuming app:
+
+```json
+"@bullmq-monitor/root": "file:../bullmq-monitor/dist-packages/bullmq-monitor-root.tgz",
+"@bullmq-monitor/nest": "file:../bullmq-monitor/dist-packages/bullmq-monitor-nest.tgz"
+```
+
+A tarball rather than a directory on purpose: npm copies it, so the package
+resolves its peer dependencies from the consuming app. A `file:` directory is
+symlinked, and would resolve nest, express and bullmq from this repo instead,
+which surfaces as type mismatches that would never happen after publishing.
+
+Re-run `npm run pack:local` and `npm install` in the app after each change.
+
 ## Releasing
 
 Versions are managed with lerna and published by CI.
