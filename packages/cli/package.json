@@ -1,5 +1,5 @@
 {
-  "name": "@bullmq-monitor/cli",
+  "name": "bullmq-monitor-cli",
   "version": "6.0.0",
   "description": "CLI for BullMQ Monitor - run a queue dashboard without writing any code",
   "keywords": [
@@ -32,9 +32,6 @@
   "engines": {
     "node": ">=20"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json && chmod +x dist/index.js",
     "clean": "rm -rf ./dist",
@@ -42,8 +39,8 @@
     "dev": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
-    "@bullmq-monitor/express": "^6.0.0",
-    "@bullmq-monitor/root": "^6.0.0",
+    "bullmq-monitor-express": "^6.0.0",
+    "bullmq-monitor": "^6.0.0",
     "bull": "^4.16.0",
     "bullmq": "^5.0.0 || ^6.0.0",
     "commander": "^12.1.0",

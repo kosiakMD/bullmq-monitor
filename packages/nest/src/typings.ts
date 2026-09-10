@@ -1,4 +1,4 @@
-import type { Config } from '@bullmq-monitor/root';
+import type { Config } from 'bullmq-monitor';
 import type { ModuleMetadata, Type } from '@nestjs/common';
 
 export type BullMonitorModuleOptions = Config & {

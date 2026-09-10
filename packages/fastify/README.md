@@ -1,10 +1,10 @@
-# @bullmq-monitor/fastify
+# bullmq-monitor-fastify
 
 Fastify adapter for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
 Supports Fastify 4 and Fastify 5.
 
 ```bash
-npm i @bullmq-monitor/fastify
+npm i bullmq-monitor-fastify
 ```
 
 ## Usage
@@ -12,8 +12,8 @@ npm i @bullmq-monitor/fastify
 ```ts
 import Fastify from 'fastify';
 import { Queue } from 'bullmq';
-import { BullMonitorFastify } from '@bullmq-monitor/fastify';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorFastify } from 'bullmq-monitor-fastify';
+import { BullMQAdapter } from 'bullmq-monitor';
 
 const app = Fastify();
 const monitor = new BullMonitorFastify({
@@ -44,7 +44,7 @@ Fastify parses JSON bodies itself, so no extra body handling is needed.
 `auth` guards the dashboard, its assets and the GraphQL endpoint together:
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 new BullMonitorFastify({
   queues,

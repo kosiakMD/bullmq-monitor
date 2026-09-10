@@ -6,8 +6,8 @@
  * already have works too; this just means you do not need one.
  */
 import Express from 'express';
-import { BullMonitorExpress } from '@bullmq-monitor/express';
-import { BullMQAdapter, basicAuth } from '@bullmq-monitor/root';
+import { BullMonitorExpress } from 'bullmq-monitor-express';
+import { BullMQAdapter, basicAuth } from 'bullmq-monitor';
 import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
 const PORT = Number(process.env.PORT || 3000);

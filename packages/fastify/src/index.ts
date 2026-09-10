@@ -1,5 +1,5 @@
-import { BullMonitor } from '@bullmq-monitor/root';
-import type { Config } from '@bullmq-monitor/root';
+import { BullMonitor } from 'bullmq-monitor';
+import type { Config } from 'bullmq-monitor';
 import type {
   FastifyInstance,
   FastifyPluginAsync,

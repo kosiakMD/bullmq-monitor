@@ -3,8 +3,8 @@ import { Queue as BullMqQueue } from 'bullmq';
 import BullQueue from 'bull';
 import Redis from 'ioredis';
 import Express from 'express';
-import { BullMonitorExpress } from '@bullmq-monitor/express';
-import { BullAdapter, BullMQAdapter, Queue } from '@bullmq-monitor/root';
+import { BullMonitorExpress } from 'bullmq-monitor-express';
+import { BullAdapter, BullMQAdapter, Queue } from 'bullmq-monitor';
 import { createCommand, Option } from 'commander';
 
 const pkg = require('../package.json');

@@ -1,6 +1,6 @@
 import Koa from 'koa';
-import { BullMonitorKoa } from '@bullmq-monitor/koa';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorKoa } from 'bullmq-monitor-koa';
+import { BullMQAdapter } from 'bullmq-monitor';
 import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
 const PORT = Number(process.env.PORT || 3002);

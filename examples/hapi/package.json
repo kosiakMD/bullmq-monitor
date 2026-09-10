@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@bullmq-monitor-examples/shared": "*",
-    "@bullmq-monitor/hapi": "*",
-    "@bullmq-monitor/root": "*",
+    "bullmq-monitor-hapi": "*",
+    "bullmq-monitor": "*",
     "@hapi/hapi": "^21.3.12",
     "bullmq": "^6.0.0"
   },

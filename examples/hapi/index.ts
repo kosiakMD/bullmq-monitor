@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
-import { BullMonitorHapi } from '@bullmq-monitor/hapi';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorHapi } from 'bullmq-monitor-hapi';
+import { BullMQAdapter } from 'bullmq-monitor';
 import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
 const PORT = Number(process.env.PORT || 3005);

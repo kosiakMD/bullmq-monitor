@@ -1,5 +1,5 @@
 {
-  "name": "@bullmq-monitor/koa",
+  "name": "bullmq-monitor-koa",
   "version": "6.0.0",
   "description": "Koa adapter for BullMQ Monitor - a dashboard for BullMQ and Bull queues",
   "keywords": [
@@ -29,9 +29,6 @@
   "engines": {
     "node": ">=20"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json",
     "clean": "rm -rf ./dist",
@@ -39,7 +36,7 @@
     "dev": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
-    "@bullmq-monitor/root": "^6.0.0",
+    "bullmq-monitor": "^6.0.0",
     "@koa/router": "^13.0.0 || ^14.0.0 || ^15.0.0"
   },
   "peerDependencies": {

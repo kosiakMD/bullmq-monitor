@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
-import { BullMonitorFastify } from '@bullmq-monitor/fastify';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorFastify } from 'bullmq-monitor-fastify';
+import { BullMQAdapter } from 'bullmq-monitor';
 import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
 const PORT = Number(process.env.PORT || 3003);

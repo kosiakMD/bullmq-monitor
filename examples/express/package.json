@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@bullmq-monitor-examples/shared": "*",
-    "@bullmq-monitor/express": "*",
-    "@bullmq-monitor/root": "*",
+    "bullmq-monitor-express": "*",
+    "bullmq-monitor": "*",
     "bullmq": "^6.0.0",
     "express": "^5.1.0"
   },

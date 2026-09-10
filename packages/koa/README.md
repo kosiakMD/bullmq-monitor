@@ -1,10 +1,10 @@
-# @bullmq-monitor/koa
+# bullmq-monitor-koa
 
 Koa adapter for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
 Supports Koa 2 and Koa 3.
 
 ```bash
-npm i @bullmq-monitor/koa
+npm i bullmq-monitor-koa
 ```
 
 ## Usage
@@ -12,8 +12,8 @@ npm i @bullmq-monitor/koa
 ```ts
 import Koa from 'koa';
 import { Queue } from 'bullmq';
-import { BullMonitorKoa } from '@bullmq-monitor/koa';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorKoa } from 'bullmq-monitor-koa';
+import { BullMQAdapter } from 'bullmq-monitor';
 
 const app = new Koa();
 const monitor = new BullMonitorKoa({
@@ -45,7 +45,7 @@ registers absolute paths.
 `auth` guards the dashboard, its assets and the GraphQL endpoint together:
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 new BullMonitorKoa({
   queues,

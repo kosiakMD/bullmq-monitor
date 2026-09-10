@@ -8,5 +8,5 @@ export type {
   BullMonitorOptionsFactory,
 } from './typings';
 // re-exported for convenience so apps only need one import
-export { BullMQAdapter, BullAdapter } from '@bullmq-monitor/root';
-export type { Config, MetricsConfig } from '@bullmq-monitor/root';
+export { BullMQAdapter, BullAdapter } from 'bullmq-monitor';
+export type { Config, MetricsConfig } from 'bullmq-monitor';

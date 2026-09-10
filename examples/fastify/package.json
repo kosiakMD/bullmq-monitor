@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@bullmq-monitor-examples/shared": "*",
-    "@bullmq-monitor/fastify": "*",
-    "@bullmq-monitor/root": "*",
+    "bullmq-monitor-fastify": "*",
+    "bullmq-monitor": "*",
     "bullmq": "^6.0.0",
     "fastify": "^5.1.0"
   },

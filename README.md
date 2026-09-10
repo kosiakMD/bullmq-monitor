@@ -1,9 +1,9 @@
 # BullMQ Monitor
 
 [![CI](https://github.com/kosiakMD/bullmq-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/kosiakMD/bullmq-monitor/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@bullmq-monitor/root.svg)](https://www.npmjs.com/package/@bullmq-monitor/root)
-[![node](https://img.shields.io/node/v/@bullmq-monitor/root.svg)](https://nodejs.org)
-[![license](https://img.shields.io/npm/l/@bullmq-monitor/root.svg)](./LICENSE)
+[![npm](https://img.shields.io/npm/v/bullmq-monitor.svg)](https://www.npmjs.com/package/bullmq-monitor)
+[![node](https://img.shields.io/node/v/bullmq-monitor.svg)](https://nodejs.org)
+[![license](https://img.shields.io/npm/l/bullmq-monitor.svg)](./LICENSE)
 
 [Demo](https://kosiakmd.github.io/bullmq-monitor)
 
@@ -30,17 +30,17 @@ which was archived in 2023. See [what changed](#what-changed-in-this-fork).
 Pick the adapter for your framework. Each one pulls in the core package.
 
 ```bash
-npm i @bullmq-monitor/express
+npm i bullmq-monitor-express
 ```
 
 | Framework | Package | Supported |
 | --- | --- | --- |
-| Express | `@bullmq-monitor/express` | 4.17 and newer, 5.x |
-| NestJS | `@bullmq-monitor/nest` | 10, 11, 12, on Express or Fastify |
-| Koa | `@bullmq-monitor/koa` | 2.15 and newer, 3.x |
-| Fastify | `@bullmq-monitor/fastify` | 4.x, 5.x |
-| Hapi | `@bullmq-monitor/hapi` | 20.x, 21.x |
-| No framework | `@bullmq-monitor/cli` | — |
+| Express | `bullmq-monitor-express` | 4.17 and newer, 5.x |
+| NestJS | `bullmq-monitor-nest` | 10, 11, 12, on Express or Fastify |
+| Koa | `bullmq-monitor-koa` | 2.15 and newer, 3.x |
+| Fastify | `bullmq-monitor-fastify` | 4.x, 5.x |
+| Hapi | `bullmq-monitor-hapi` | 20.x, 21.x |
+| No framework | `bullmq-monitor-cli` | — |
 
 Queue libraries and the runtime:
 
@@ -61,8 +61,8 @@ uses BullMQ alone never needs `bull` installed.
 ```ts
 import Express from 'express';
 import { Queue } from 'bullmq';
-import { BullMonitorExpress } from '@bullmq-monitor/express';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorExpress } from 'bullmq-monitor-express';
+import { BullMQAdapter } from 'bullmq-monitor';
 
 const queue = new Queue('emails', { connection: { host: 'localhost', port: 6379 } });
 
@@ -80,7 +80,7 @@ The dashboard is now on `http://localhost:3000/admin/queues`.
 
 ```ts
 import { Module } from '@nestjs/common';
-import { BullMonitorModule, BullMQAdapter } from '@bullmq-monitor/nest';
+import { BullMonitorModule, BullMQAdapter } from 'bullmq-monitor-nest';
 import { BullModule, getQueueToken } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 
@@ -105,7 +105,7 @@ three routes under `path`: the dashboard, its static assets and the GraphQL endp
 ### CLI
 
 ```bash
-npx @bullmq-monitor/cli -q emails -q reports --redis-uri redis://localhost:6379
+npx bullmq-monitor-cli -q emails -q reports --redis-uri redis://localhost:6379
 ```
 
 Other adapters are shown in [`examples/`](./examples).
@@ -281,7 +281,7 @@ inside the monitor and guards all three routes: the page, its assets and the
 GraphQL endpoint. It works the same on every adapter.
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 new BullMonitorExpress({
   queues,
@@ -324,7 +324,7 @@ in the UI.
 - The dashboard ships inside the package instead of loading from jsDelivr.
 - Assets are fingerprinted by content, so a rebuild can never serve a stale bundle.
 - New: filter jobs by name, and a clear-filters action.
-- New `@bullmq-monitor/nest` package, replacing the copy-paste Nest example.
+- New `bullmq-monitor-nest` package, replacing the copy-paste Nest example.
 - Express 5, Koa 3, Fastify 5 and Hapi 21 support.
 - React 18, Vite 5, jotai 2, zustand 4 in the dashboard.
 - Fixed: data search on the `waiting` status scanned the wrong redis key and always returned nothing.
@@ -358,8 +358,8 @@ npm run pack:local          # writes ./dist-packages/*.tgz
 then in the consuming app:
 
 ```json
-"@bullmq-monitor/root": "file:../bullmq-monitor/dist-packages/bullmq-monitor-root.tgz",
-"@bullmq-monitor/nest": "file:../bullmq-monitor/dist-packages/bullmq-monitor-nest.tgz"
+"bullmq-monitor": "file:../bullmq-monitor/dist-packages/bullmq-monitor-root.tgz",
+"bullmq-monitor-nest": "file:../bullmq-monitor/dist-packages/bullmq-monitor-nest.tgz"
 ```
 
 A tarball rather than a directory on purpose: npm copies it, so the package
@@ -395,9 +395,6 @@ repeated.
 CI can do the same: push a tag and `.github/workflows/release.yml` rebuilds,
 runs the tests and the smoke suite, then publishes with provenance. It needs the
 same token as an `NPM_TOKEN` repository secret.
-
-The `@bullmq-monitor` scope requires an npm organisation of that name; a
-personal account can only publish to its own `@username` scope.
 
 ## License
 

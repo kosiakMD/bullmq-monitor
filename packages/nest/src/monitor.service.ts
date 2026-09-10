@@ -1,11 +1,11 @@
-import { BullMonitor, readJsonBody } from '@bullmq-monitor/root';
+import { BullMonitor, readJsonBody } from 'bullmq-monitor';
 import type {
   AuthContext,
   Config,
   HttpGraphQLRequest,
   HttpGraphQLResponse,
   UiAsset,
-} from '@bullmq-monitor/root';
+} from 'bullmq-monitor';
 import type { IncomingMessage } from 'http';
 
 /**

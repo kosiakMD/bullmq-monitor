@@ -1,10 +1,10 @@
-# @bullmq-monitor/nest
+# bullmq-monitor-nest
 
 NestJS module for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
 Supports NestJS 10, 11 and 12, on Express or Fastify.
 
 ```bash
-npm i @bullmq-monitor/nest
+npm i bullmq-monitor-nest
 ```
 
 
@@ -25,7 +25,7 @@ Reuse the queues Nest already manages:
 ```ts
 import { Module } from '@nestjs/common';
 import { BullModule, getQueueToken } from '@nestjs/bullmq';
-import { BullMonitorModule, BullMQAdapter } from '@bullmq-monitor/nest';
+import { BullMonitorModule, BullMQAdapter } from 'bullmq-monitor-nest';
 import type { Queue } from 'bullmq';
 
 @Module({
@@ -122,7 +122,7 @@ The module accepts the core `auth` guard, which protects the dashboard, its
 assets and the GraphQL endpoint together:
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 BullMonitorModule.forRoot({
   path: '/admin/queues',

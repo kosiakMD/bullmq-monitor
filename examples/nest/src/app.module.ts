@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
-import { BullMonitorModule, BullMQAdapter } from '@bullmq-monitor/nest';
+import { BullMonitorModule, BullMQAdapter } from 'bullmq-monitor-nest';
 import { getQueueToken } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import { EmailsModule } from './emails/emails.module';

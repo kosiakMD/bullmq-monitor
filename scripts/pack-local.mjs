@@ -3,7 +3,7 @@
  *
  * Consuming apps can then depend on the tarballs before anything is on npm:
  *
- *   "@bullmq-monitor/root": "file:../bullmq-monitor/dist-packages/bullmq-monitor-root.tgz"
+ *   "bullmq-monitor": "file:../bullmq-monitor/dist-packages/bullmq-monitor-root.tgz"
  *
  * A tarball is used rather than a directory on purpose: npm copies it, so the
  * package resolves peer dependencies (nest, express, bullmq) from the consuming

@@ -28,7 +28,7 @@ const iconType = (url: string): string => {
 
 /**
  * Renders the dashboard shell and serves the bundled static assets.
- * Assets live in <package root>/ui and are copied there from @bullmq-monitor/ui
+ * Assets live in <package root>/ui and are copied there from bullmq-monitor-ui
  * during the build, so no CDN is required at runtime.
  */
 export class UI {

@@ -1,5 +1,5 @@
 {
-  "name": "@bullmq-monitor/nest",
+  "name": "bullmq-monitor-nest",
   "version": "6.0.0",
   "description": "NestJS module for BullMQ Monitor - a dashboard for BullMQ and Bull queues",
   "keywords": [
@@ -30,9 +30,6 @@
   "engines": {
     "node": ">=20"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json",
     "clean": "rm -rf ./dist",
@@ -40,7 +37,7 @@
     "dev": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
-    "@bullmq-monitor/root": "^6.0.0"
+    "bullmq-monitor": "^6.0.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^10.0.0 || ^11.0.0 || ^12.0.0",

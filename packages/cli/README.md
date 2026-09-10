@@ -1,16 +1,16 @@
-# @bullmq-monitor/cli
+# bullmq-monitor-cli
 
 Run [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor) against existing
 queues without writing any code.
 
 ```bash
-npx @bullmq-monitor/cli -q emails -q reports
+npx bullmq-monitor-cli -q emails -q reports
 ```
 
 ## Install
 
 ```bash
-npm i -g @bullmq-monitor/cli
+npm i -g bullmq-monitor-cli
 ```
 
 ## Usage
@@ -59,7 +59,7 @@ bullmq-monitor -q emails --bull --prefix myapp
 ## Branding and auth
 
 The CLI is meant for a quick look at a queue, so it exposes no branding or auth
-options. Mount [`@bullmq-monitor/express`](https://www.npmjs.com/package/@bullmq-monitor/express)
+options. Mount [`bullmq-monitor-express`](https://www.npmjs.com/package/bullmq-monitor-express)
 in your own app when you need a guard, your logo or saved filter presets.
 
 Use `--readonly` to make the CLI refuse every mutating action.

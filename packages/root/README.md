@@ -1,14 +1,14 @@
-# @bullmq-monitor/root
+# bullmq-monitor
 
 Core of [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor): the queue
 adapters, the GraphQL API and the bundled dashboard assets.
 
 You normally install a framework adapter instead
-(`@bullmq-monitor/express`, `@bullmq-monitor/nest`, …) and import the adapters
+(`bullmq-monitor-express`, `bullmq-monitor-nest`, …) and import the adapters
 from here.
 
 ```bash
-npm i @bullmq-monitor/root
+npm i bullmq-monitor
 ```
 
 ## Queue adapters
@@ -16,7 +16,7 @@ npm i @bullmq-monitor/root
 Every queue handed to the monitor must be wrapped.
 
 ```ts
-import { BullMQAdapter, BullAdapter } from '@bullmq-monitor/root';
+import { BullMQAdapter, BullAdapter } from 'bullmq-monitor';
 import { Queue } from 'bullmq';
 
 new BullMQAdapter(new Queue('emails', { connection }));
@@ -49,7 +49,7 @@ of this package therefore works with both.
 ## Auth
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 auth: basicAuth({ users: { admin: process.env.QUEUES_PASSWORD! } });
 ```
@@ -124,7 +124,7 @@ so one entry covers a whole family of lookups.
 `BullMonitor` is framework-agnostic. An adapter wires three routes:
 
 ```ts
-import { BullMonitor, readJsonBody } from '@bullmq-monitor/root';
+import { BullMonitor, readJsonBody } from 'bullmq-monitor';
 
 class MyAdapter extends BullMonitor {
   async init() {

@@ -1,6 +1,6 @@
 import Express from 'express';
-import { BullMonitorExpress } from '@bullmq-monitor/express';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorExpress } from 'bullmq-monitor-express';
+import { BullMQAdapter } from 'bullmq-monitor';
 import path from 'path';
 import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 

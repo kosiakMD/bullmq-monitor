@@ -3,8 +3,8 @@
  * Run with: npm run express4 -w examples/express
  */
 import Express from 'express';
-import { BullMonitorExpress } from '@bullmq-monitor/express';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorExpress } from 'bullmq-monitor-express';
+import { BullMQAdapter } from 'bullmq-monitor';
 import { seedQueues } from '@bullmq-monitor-examples/shared/seed';
 
 const PORT = Number(process.env.PORT || 3004);

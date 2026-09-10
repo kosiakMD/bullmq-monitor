@@ -17,7 +17,7 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build:ui && lerna run build --ignore @bullmq-monitor/ui",
+    "build": "npm run build:ui && lerna run build --ignore bullmq-monitor-ui",
     "build:ui": "npm run build -w packages/ui",
     "build:demo": "npm run build-demo -w packages/ui",
     "typecheck": "tsc -p tsconfig.json && npm run typecheck -w packages/ui",

@@ -2,7 +2,7 @@
 
 ## 6.0.0
 
-First release of the `@bullmq-monitor/*` packages, forked from
+First release of the `bullmq-monitor` packages, forked from
 [`@bull-monitor/*`](https://github.com/s-r-x/bull-monitor) 5.4.0, which was
 archived in 2023.
 
@@ -30,7 +30,7 @@ original packages.
   controls.
 - **Auth.** An `auth` guard in the core config protects the page, its assets and
   the GraphQL endpoint on every adapter, with a `basicAuth` helper included.
-- **`@bullmq-monitor/nest`.** A real NestJS module with `forRoot` and
+- **`bullmq-monitor-nest`.** A real NestJS module with `forRoot` and
   `forRootAsync`, replacing the copy-paste example. Routes are declared without
   wildcards, so it behaves the same on Nest 10, 11 and 12, on Express or Fastify.
 - **BullMQ v6 support**, alongside v5. Bull v4 keeps working.
@@ -41,7 +41,8 @@ original packages.
 
 ### Breaking changes
 
-- Packages renamed from `@bull-monitor/*` to `@bullmq-monitor/*`.
+- Packages renamed from `@bull-monitor/*` to unscoped `bullmq-monitor*`, so the
+  scope no longer has to belong to anyone.
 - Node.js 20 or newer is required.
 - Apollo Server 3 (end of life) replaced by Apollo Server 5. Adapters now speak
   a small framework-agnostic HTTP contract instead of embedding Apollo's own
@@ -50,7 +51,7 @@ original packages.
   `BullMonitorHapi.init` takes `{ auth }`.
 - The CLI defaults to BullMQ; pass `--bull` for Bull. Its binary is now
   `bullmq-monitor`.
-- `@bullmq-monitor/root` exposes `BullMQAdapter` and `BullAdapter` from the
+- `bullmq-monitor` exposes `BullMQAdapter` and `BullAdapter` from the
   package root; the `dist/bull-adapter` deep import is gone.
 - Queue ids are derived from the key prefix and queue name, so bookmarked links
   from `@bull-monitor` do not carry over.

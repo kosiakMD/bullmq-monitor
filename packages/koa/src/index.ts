@@ -1,5 +1,5 @@
-import { BullMonitor, readJsonBody } from '@bullmq-monitor/root';
-import type { Config } from '@bullmq-monitor/root';
+import { BullMonitor, readJsonBody } from 'bullmq-monitor';
+import type { Config } from 'bullmq-monitor';
 import Router from '@koa/router';
 import type { Middleware, Context } from 'koa';
 import type { Server as HttpServer } from 'http';

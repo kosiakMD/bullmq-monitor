@@ -1,10 +1,10 @@
-# @bullmq-monitor/express
+# bullmq-monitor-express
 
 Express adapter for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
 Supports Express 4 and Express 5.
 
 ```bash
-npm i @bullmq-monitor/express
+npm i bullmq-monitor-express
 ```
 
 ## Usage
@@ -12,8 +12,8 @@ npm i @bullmq-monitor/express
 ```ts
 import Express from 'express';
 import { Queue } from 'bullmq';
-import { BullMonitorExpress } from '@bullmq-monitor/express';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorExpress } from 'bullmq-monitor-express';
+import { BullMQAdapter } from 'bullmq-monitor';
 
 const queue = new Queue('emails', { connection: { host: 'localhost', port: 6379 } });
 
@@ -59,7 +59,7 @@ parses the body into something unusual.
 `auth` guards the dashboard, its assets and the GraphQL endpoint together:
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 new BullMonitorExpress({
   queues,

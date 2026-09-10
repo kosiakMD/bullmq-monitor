@@ -1,5 +1,5 @@
-import { BullMonitor, readJsonBody } from '@bullmq-monitor/root';
-import type { Config, HttpGraphQLResponse } from '@bullmq-monitor/root';
+import { BullMonitor, readJsonBody } from 'bullmq-monitor';
+import type { Config, HttpGraphQLResponse } from 'bullmq-monitor';
 import { Router } from 'express';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { Server as HttpServer } from 'http';

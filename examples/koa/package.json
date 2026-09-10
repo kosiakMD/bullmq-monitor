@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@bullmq-monitor-examples/shared": "*",
-    "@bullmq-monitor/koa": "*",
-    "@bullmq-monitor/root": "*",
+    "bullmq-monitor-koa": "*",
+    "bullmq-monitor": "*",
     "bullmq": "^6.0.0",
     "koa": "^2.15.3"
   },

@@ -8,7 +8,7 @@ const dst = path.resolve(__dirname, '../ui');
 
 if (!fs.existsSync(path.join(src, 'main.js'))) {
   console.error(
-    `[@bullmq-monitor/root] UI build not found at ${src}. Run "npm run build -w packages/ui" first.`
+    `[bullmq-monitor] UI build not found at ${src}. Run "npm run build -w packages/ui" first.`
   );
   process.exit(1);
 }
@@ -20,4 +20,4 @@ for (const file of fs.readdirSync(src)) {
     fs.copyFileSync(from, path.join(dst, file));
   }
 }
-console.log(`[@bullmq-monitor/root] UI assets copied to ${dst}`);
+console.log(`[bullmq-monitor] UI assets copied to ${dst}`);

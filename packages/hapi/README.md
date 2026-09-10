@@ -1,10 +1,10 @@
-# @bullmq-monitor/hapi
+# bullmq-monitor-hapi
 
 Hapi adapter for [BullMQ Monitor](https://github.com/kosiakMD/bullmq-monitor).
 Supports Hapi 20 and Hapi 21.
 
 ```bash
-npm i @bullmq-monitor/hapi
+npm i bullmq-monitor-hapi
 ```
 
 ## Usage
@@ -12,8 +12,8 @@ npm i @bullmq-monitor/hapi
 ```ts
 import Hapi from '@hapi/hapi';
 import { Queue } from 'bullmq';
-import { BullMonitorHapi } from '@bullmq-monitor/hapi';
-import { BullMQAdapter } from '@bullmq-monitor/root';
+import { BullMonitorHapi } from 'bullmq-monitor-hapi';
+import { BullMQAdapter } from 'bullmq-monitor';
 
 const server = Hapi.server({ port: 3000, host: 'localhost' });
 const monitor = new BullMonitorHapi({
@@ -41,7 +41,7 @@ await server.start();
 `auth` guards the dashboard, its assets and the GraphQL endpoint together:
 
 ```ts
-import { basicAuth } from '@bullmq-monitor/root';
+import { basicAuth } from 'bullmq-monitor';
 
 new BullMonitorHapi({
   queues,

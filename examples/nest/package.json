@@ -9,8 +9,8 @@
     "build": "nest build"
   },
   "dependencies": {
-    "@bullmq-monitor/nest": "*",
-    "@bullmq-monitor/root": "*",
+    "bullmq-monitor-nest": "*",
+    "bullmq-monitor": "*",
     "@nestjs/bullmq": "^11.0.2",
     "@nestjs/common": "^10.4.20",
     "@nestjs/core": "^10.4.20",

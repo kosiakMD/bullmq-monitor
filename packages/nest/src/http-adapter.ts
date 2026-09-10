@@ -1,4 +1,4 @@
-import type { HttpGraphQLResponse, UiAsset } from '@bullmq-monitor/root';
+import type { HttpGraphQLResponse, UiAsset } from 'bullmq-monitor';
 
 /**
  * Nest supports both Express and Fastify. Their request/response objects have
