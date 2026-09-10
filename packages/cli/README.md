@@ -47,6 +47,23 @@ Watch legacy Bull queues with a custom key prefix:
 bullmq-monitor -q emails --bull --prefix myapp
 ```
 
+
+## Supported versions
+
+| | |
+| --- | --- |
+| Node.js | 20, 22, 24 |
+| BullMQ | 5, 6 (default) |
+| Bull | 4 (`--bull`) |
+
+## Branding and auth
+
+The CLI is meant for a quick look at a queue, so it exposes no branding or auth
+options. Mount [`@bullmq-monitor/express`](https://www.npmjs.com/package/@bullmq-monitor/express)
+in your own app when you need a guard, your logo or saved filter presets.
+
+Use `--readonly` to make the CLI refuse every mutating action.
+
 ## License
 
 MIT

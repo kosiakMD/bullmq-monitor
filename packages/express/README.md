@@ -45,17 +45,49 @@ await monitor.init({
 `bodyParsed` is detected automatically, so you only need it when a middleware
 parses the body into something unusual.
 
-## Behind basic auth
+## Supported versions
+
+| | |
+| --- | --- |
+| Node.js | 20, 22, 24 |
+| BullMQ | 5, 6 |
+| Bull | 4 |
+| Express | 4.17 and newer, 5.x |
+
+## Auth
+
+`auth` guards the dashboard, its assets and the GraphQL endpoint together:
 
 ```ts
-app.use('/admin/queues', basicAuth({ challenge: true, users: { admin: 'pass' } }), monitor.router);
+import { basicAuth } from '@bullmq-monitor/root';
+
+new BullMonitorExpress({
+  queues,
+  auth: basicAuth({ users: { admin: process.env.QUEUES_PASSWORD! } }),
+});
 ```
 
-## Shutdown
+Any check works: the guard receives `{ method, path, headers, search }` and
+returns a boolean, or `{ authorized, status?, headers?, body? }` to shape the
+refusal.
+
+## Branding
+
+Title, logo, favicon, top-bar links, date formats, colours and saved filter
+presets all come from the `ui` option, with no rebuild:
 
 ```ts
-await monitor.close();
+ui: {
+  title: 'Acme Queues',
+  logo: { path: '/static/logo.svg', darkPath: '/static/logo-white.svg', height: 26 },
+  theme: { mode: 'dark', primary: '#D92D20' },
+  filterPresets: [
+    { label: 'Failed sends', status: 'failed', name: 'send-*' },
+  ],
+}
 ```
+
+See the [branding reference](https://github.com/kosiakMD/bullmq-monitor#branding).
 
 ## License
 

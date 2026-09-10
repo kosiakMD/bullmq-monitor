@@ -33,14 +33,26 @@ Pick the adapter for your framework. Each one pulls in the core package.
 npm i @bullmq-monitor/express
 ```
 
-| Framework | Package |
+| Framework | Package | Supported |
+| --- | --- | --- |
+| Express | `@bullmq-monitor/express` | 4.17 and newer, 5.x |
+| NestJS | `@bullmq-monitor/nest` | 10, 11, 12, on Express or Fastify |
+| Koa | `@bullmq-monitor/koa` | 2.15 and newer, 3.x |
+| Fastify | `@bullmq-monitor/fastify` | 4.x, 5.x |
+| Hapi | `@bullmq-monitor/hapi` | 20.x, 21.x |
+| No framework | `@bullmq-monitor/cli` | — |
+
+Queue libraries and the runtime:
+
+| | |
 | --- | --- |
-| Express 4 / 5 | `@bullmq-monitor/express` |
-| NestJS 10 / 11 / 12 | `@bullmq-monitor/nest` |
-| Koa 2 / 3 | `@bullmq-monitor/koa` |
-| Fastify 4 / 5 | `@bullmq-monitor/fastify` |
-| Hapi 20 / 21 | `@bullmq-monitor/hapi` |
-| No framework | `@bullmq-monitor/cli` |
+| Node.js | 20, 22, 24 |
+| BullMQ | 5, 6 |
+| Bull | 4 |
+| ioredis | 5, 6 |
+
+`bull`, `bullmq` and `ioredis` are optional peer dependencies, so an app that
+uses BullMQ alone never needs `bull` installed.
 
 ## Quick start
 

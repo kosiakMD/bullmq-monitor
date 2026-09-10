@@ -31,13 +31,49 @@ app.listen(3000);
 `baseUrl` is required here, unlike the Express adapter, because the router
 registers absolute paths.
 
+## Supported versions
+
+| | |
+| --- | --- |
+| Node.js | 20, 22, 24 |
+| BullMQ | 5, 6 |
+| Bull | 4 |
+| Koa | 2.15 and newer, 3.x |
+
 ## Auth
 
+`auth` guards the dashboard, its assets and the GraphQL endpoint together:
+
 ```ts
-await monitor.init({ middleware: basicAuth({ name: 'admin', pass: 'pass' }) });
+import { basicAuth } from '@bullmq-monitor/root';
+
+new BullMonitorKoa({
+  queues,
+  auth: basicAuth({ users: { admin: process.env.QUEUES_PASSWORD! } }),
+});
 ```
 
-The middleware runs before every dashboard route.
+Any check works: the guard receives `{ method, path, headers, search }` and
+returns a boolean, or `{ authorized, status?, headers?, body? }` to shape the
+refusal.
+
+## Branding
+
+Title, logo, favicon, top-bar links, date formats, colours and saved filter
+presets all come from the `ui` option, with no rebuild:
+
+```ts
+ui: {
+  title: 'Acme Queues',
+  logo: { path: '/static/logo.svg', darkPath: '/static/logo-white.svg', height: 26 },
+  theme: { mode: 'dark', primary: '#D92D20' },
+  filterPresets: [
+    { label: 'Failed sends', status: 'failed', name: 'send-*' },
+  ],
+}
+```
+
+See the [branding reference](https://github.com/kosiakMD/bullmq-monitor#branding).
 
 ## License
 

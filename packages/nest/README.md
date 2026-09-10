@@ -7,6 +7,17 @@ Supports NestJS 10, 11 and 12, on Express or Fastify.
 npm i @bullmq-monitor/nest
 ```
 
+
+## Supported versions
+
+| | |
+| --- | --- |
+| Node.js | 20, 22, 24 |
+| NestJS | 10, 11, 12 |
+| BullMQ | 5, 6 |
+| Bull | 4 |
+| Platform | Express and Fastify |
+
 ## Usage with @nestjs/bullmq
 
 Reuse the queues Nest already manages:
