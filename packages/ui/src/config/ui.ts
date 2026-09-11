@@ -39,6 +39,16 @@ export type TFilterPreset = {
   valuePlaceholder?: string;
 };
 
+export type TServerFilterField = {
+  path: string;
+  label: string;
+  type?: 'string' | 'number' | 'boolean' | 'date' | 'enum';
+  options?: Array<string | { value: string; label: string }>;
+  dateFormat?: 'iso' | 'epoch';
+  hint?: string;
+  queues?: string[];
+};
+
 export type TServerUiConfig = {
   title?: string;
   logo?: {
@@ -52,6 +62,7 @@ export type TServerUiConfig = {
   links?: { text: string; url: string }[];
   dateFormats?: { short?: string; full?: string };
   filterPresets?: TFilterPreset[];
+  filterFields?: TServerFilterField[];
   theme?: TServerThemeConfig;
 };
 
@@ -89,6 +100,11 @@ export const ServerThemeConfig: TServerThemeConfig = ServerUiConfig.theme ?? {};
 export const FilterPresets: TFilterPreset[] = (
   ServerUiConfig.filterPresets ?? []
 ).filter((preset) => preset && typeof preset.label === 'string');
+
+/** the payload fields the host described, offered in the filter builder */
+export const FilterFields: TServerFilterField[] = (
+  ServerUiConfig.filterFields ?? []
+).filter((field) => field && field.path && field.label);
 
 export const DateFormatsConfig = {
   short: ServerUiConfig.dateFormats?.short || 'YYYY-MM-DD HH:mm:ss',

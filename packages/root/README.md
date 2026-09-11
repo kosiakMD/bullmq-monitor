@@ -98,6 +98,25 @@ ui: {
 `logo.darkPath` covers a wordmark drawn for one scheme only. Colours at the top
 level of `theme` apply to both schemes; `light` and `dark` override them.
 
+## Filter builder
+
+Describe the payload and the dashboard offers a pick-and-choose filter instead of
+a raw jsonata box:
+
+```ts
+ui: {
+  filterFields: [
+    { path: 'data.organizationId', label: 'Organization', type: 'string' },
+    { path: 'data.createdAt', label: 'Created', type: 'date', dateFormat: 'iso' },
+    { path: 'data.channel', label: 'Channel', type: 'enum', options: ['email', 'sms'] },
+  ],
+}
+```
+
+Types decide the operators and the input. The job's own fields (name, attempts,
+timestamps, failure reason) are always available. See the
+[full reference](https://github.com/kosiakMD/bullmq-monitor#filter-builder).
+
 ## Filter presets
 
 Saved searches the host application ships with the dashboard:

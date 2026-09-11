@@ -9,7 +9,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": { "@/*": ["./src/*"] },
-    "types": ["vite/client", "node"],
+    "types": ["vite/client", "node", "jest"],
     "noEmit": true,
     "isolatedModules": true,
     "strict": true,

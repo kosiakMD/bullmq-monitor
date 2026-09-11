@@ -1,14 +1,19 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "npmClient": "npm",
-  "packages": ["packages/*"],
-  "version": "6.0.0",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "6.1.0",
   "command": {
     "version": {
       "allowBranch": "main",
       "conventionalCommits": true,
       "message": "chore(release): %s",
-      "ignoreChanges": ["**/*.md", "**/*.spec.ts"]
+      "ignoreChanges": [
+        "**/*.md",
+        "**/*.spec.ts"
+      ]
     },
     "publish": {
       "registry": "https://registry.npmjs.org/"

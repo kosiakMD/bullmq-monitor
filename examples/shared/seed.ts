@@ -51,13 +51,17 @@ export async function seedQueues(
   for (const queue of queues) {
     for (const [idx, name] of JOB_NAMES.entries()) {
       const orderId = `${1000 + idx}`;
-      await queue.add(name, { shouldFail: false, sample: name, orderId });
-      await queue.add(name, { shouldFail: true, sample: name, orderId });
-      await queue.add(
-        `${name}-delayed`,
-        { sample: name, orderId },
-        { delay: 60_000 }
-      );
+      const payload = {
+        sample: name,
+        orderId,
+        organizationId: `org-${(idx % 3) + 1}`,
+        amount: (idx + 1) * 25,
+        channel: ['email', 'sms', 'push'][idx % 3],
+        createdAt: new Date(Date.now() - idx * 86_400_000).toISOString(),
+      };
+      await queue.add(name, { ...payload, shouldFail: false });
+      await queue.add(name, { ...payload, shouldFail: true });
+      await queue.add(`${name}-delayed`, payload, { delay: 60_000 });
     }
   }
 

@@ -126,6 +126,33 @@ export type UiFilterPreset = {
   valuePlaceholder?: string;
 };
 
+/**
+ * A field of your job payload, described so the dashboard can offer it in the
+ * filter builder with the right operators and the right input.
+ *
+ * Without this the only way to search a payload is to type a jsonata expression
+ * by hand; with it, picking "Organization is …" builds the expression for you.
+ */
+export type UiFilterField = {
+  /** path inside the raw job, e.g. "data.organizationId" */
+  path: string;
+  /** what to call it in the picker, e.g. "Organization" */
+  label: string;
+  /** decides the operators and the input. default: "string" */
+  type?: 'string' | 'number' | 'boolean' | 'date' | 'enum';
+  /** allowed values, for `enum` */
+  options?: Array<string | { value: string; label: string }>;
+  /**
+   * How a `date` is stored. "epoch" for milliseconds since 1970, "iso" for a
+   * date string. default: "iso"
+   */
+  dateFormat?: 'iso' | 'epoch';
+  /** shown under the field in the builder */
+  hint?: string;
+  /** limit the field to these queues, by name. omit for all of them */
+  queues?: string[];
+};
+
 /** Branding and chrome of the dashboard, all optional. */
 export type UiConfig = {
   /** page title and wordmark. default: "BullMQ Monitor" */
@@ -140,6 +167,11 @@ export type UiConfig = {
   dateFormats?: UiDateFormatsConfig;
   /** saved job filters offered in the jobs screen */
   filterPresets?: UiFilterPreset[];
+  /**
+   * Your job payload, described field by field, so the dashboard can offer a
+   * filter builder instead of a raw jsonata box.
+   */
+  filterFields?: UiFilterField[];
   /** colours */
   theme?: UiThemeConfig;
 };

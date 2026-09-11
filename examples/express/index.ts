@@ -50,6 +50,30 @@ const BASE_URL = '/admin/queues';
           name: 'generate-*',
         },
       ],
+      // describe the payload once and the dashboard offers a filter builder
+      // instead of a raw jsonata box
+      filterFields: [
+        { path: 'data.orderId', label: 'Order id', type: 'string' },
+        {
+          path: 'data.organizationId',
+          label: 'Organization id',
+          type: 'string',
+        },
+        { path: 'data.amount', label: 'Amount', type: 'number' },
+        {
+          path: 'data.createdAt',
+          label: 'Created at',
+          type: 'date',
+          dateFormat: 'iso',
+        },
+        {
+          path: 'data.channel',
+          label: 'Channel',
+          type: 'enum',
+          options: ['email', 'sms', 'push'],
+        },
+        { path: 'data.shouldFail', label: 'Expected to fail', type: 'boolean' },
+      ],
       theme: {
         mode: 'dark',
         // one accent for both schemes, then the surfaces each scheme needs

@@ -1,5 +1,19 @@
 # Changelog
 
+## 6.1.0
+
+### Features
+
+- **Filter builder.** `ui.filterFields` describes the payload field by field, and
+  the dashboard turns that into a pick-and-choose dialog: field, condition, typed
+  input. Dates get after, before, between and relative windows; enums get their
+  own values; numbers get ranges. It writes the jsonata, so nobody types paths by
+  hand. The job's own fields (name, attempts, timestamps, failure reason) are
+  always offered, with no configuration.
+
+The generated expression stays visible and the search box stays editable, so
+anything the builder cannot express can still be typed.
+
 ## 6.0.0
 
 First release of the `bullmq-monitor` packages, forked from

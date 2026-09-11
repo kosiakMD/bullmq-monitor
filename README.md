@@ -241,6 +241,46 @@ Serve the referenced images yourself; the dashboard only points at the urls you
 give it. Without `theme.lock`, viewers can still switch light/dark and pick a
 palette from the settings dialog, and their choice is remembered per browser.
 
+## Filter builder
+
+Describe your payload once and the dashboard offers a **Build filter** dialog:
+pick a field, pick a condition, fill in a typed input. It writes the jsonata for
+you, and the box stays editable for anything the builder cannot express.
+
+```ts
+ui: {
+  filterFields: [
+    { path: 'data.organizationId', label: 'Organization', type: 'string' },
+    { path: 'data.amount', label: 'Amount', type: 'number' },
+    { path: 'data.createdAt', label: 'Created', type: 'date', dateFormat: 'iso' },
+    { path: 'data.channel', label: 'Channel', type: 'enum', options: ['email', 'sms'] },
+    { path: 'data.isTest', label: 'Test run', type: 'boolean' },
+    // limit a field to the queues it exists on
+    { path: 'data.orderId', label: 'Order', queues: ['Email Send Queue'] },
+  ],
+}
+```
+
+| Field | Meaning |
+| --- | --- |
+| `path` | where it lives in the raw job, e.g. `data.orderId` |
+| `label` | what the picker calls it |
+| `type` | `string`, `number`, `boolean`, `date` or `enum`. default `string` |
+| `options` | allowed values for an `enum`, plain strings or `{ value, label }` |
+| `dateFormat` | `iso` for a date string, `epoch` for milliseconds. default `iso` |
+| `queues` | restrict the field to these queue names |
+| `hint` | a line of help under the field |
+
+The conditions offered follow the type: contains and starts with for text, a
+range for numbers, after, before, between and "in the last N days" for dates, is
+one of for enums.
+
+The job's own fields are always offered without configuring anything: job name,
+attempts, queued, started and finished timestamps, and the failure reason.
+
+A relative window like "in the last 7 days" is resolved to a fixed moment when
+you press Apply, so the filter you share is the filter someone else sees.
+
 ## Filter presets
 
 The searches worth saving are domain knowledge the dashboard cannot guess.

@@ -1,6 +1,6 @@
 {
   "name": "bullmq-monitor",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "BullMQ Monitor core: GraphQL API, queue adapters and the bundled dashboard UI",
   "keywords": [
     "bullmq",

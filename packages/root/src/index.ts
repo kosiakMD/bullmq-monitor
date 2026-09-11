@@ -10,6 +10,7 @@ export type {
   UiLinkConfig,
   UiDateFormatsConfig,
   UiFilterPreset,
+  UiFilterField,
   HttpGraphQLRequest,
   HttpGraphQLResponse,
   UiAsset,
